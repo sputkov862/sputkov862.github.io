@@ -1,0 +1,401 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0a0e27;
+    color: #e0e0e0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1a1f3a;
+}
+
+/* Верхняя панель с вкладками */
+.top-bar {
+    display: flex;
+    align-items: center;
+    background: #0f1729;
+    border-bottom: 2px solid #2a3f5f;
+    padding: 0;
+}
+
+.tabs {
+    display: flex;
+    gap: 0;
+}
+
+.tab-btn {
+    padding: 12px 40px;
+    border: none;
+    background: #1a1f3a;
+    color: #8b95a8;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background: #252d47;
+    color: #c0c8d8;
+}
+
+.tab-btn.active {
+    background: #6366f1;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.search-box {
+    margin-left: auto;
+    padding: 10px 20px;
+}
+
+.search-box input {
+    padding: 8px 15px;
+    border: 1px solid #2a3f5f;
+    border-radius: 8px;
+    width: 350px;
+    font-size: 14px;
+    background: #0f1729;
+    color: #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.search-box input::placeholder {
+    color: #5a6780;
+}
+
+/* Основной контент */
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Боковое меню */
+.sidebar {
+    width: 280px;
+    background: #0f1729;
+    border-right: 2px solid #2a3f5f;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.sidebar-title {
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #1a1f3a;
+    border-bottom: 2px solid #2a3f5f;
+    color: #e0e0e0;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid #1a2238;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    position: relative;
+    color: #8b95a8;
+}
+
+.category-item:hover {
+    background: #1a2238;
+    color: #c0c8d8;
+    padding-left: 25px;
+}
+
+.category-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    font-weight: bold;
+    border-left: 4px solid #6366f1;
+    padding-left: 16px;
+}
+
+.category-item.expandable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-item .arrow {
+    font-size: 10px;
+    color: #999;
+}
+
+/* Контейнер карты */
+.map-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.map-title {
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #2a3f5f;
+    background: #0f1729;
+    color: #e0e0e0;
+}
+
+.map-title sup {
+    font-size: 11px;
+}
+
+#map {
+    flex: 1;
+    background: #1a1f3a;
+    position: relative;
+}
+
+/* Фоновое изображение карты */
+.leaflet-container {
+    background: #1a1f3a !important;
+}
+
+/* Легенда внутри карты */
+.legend-panel {
+    position: relative;
+    margin: 20px;
+    background: rgba(15, 23, 41, 0.95);
+    border: 2px solid #2a3f5f;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 900px;
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 12px;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.legend-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(26, 31, 58, 0.5);
+    border-radius: 8px;
+    border: 1px solid #2a3f5f;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.legend-section:hover {
+    background: rgba(26, 31, 58, 0.8);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.legend-section.highlighted {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #818cf8;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.legend-section h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #818cf8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.legend-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateX(5px);
+}
+
+.legend-color {
+    min-width: 50px;
+    width: 50px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    margin-top: 2px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.legend-item span:not(.legend-color) {
+    line-height: 1.5;
+    font-size: 11px;
+    color: #c0c8d8;
+}
+
+/* Цвета категорий */
+.legend-color[data-color="festival"] { background: #87CEEB; }
+.legend-color[data-color="ceramics"] { background: #FFD700; }
+.legend-color[data-color="kitchenware"] { background: #4169E1; }
+.legend-color[data-color="gardening"] { background: #ADFF2F; }
+.legend-color[data-color="weaving"] { background: #32CD32; }
+.legend-color[data-color="international-a"] { background: #FF69B4; }
+.legend-color[data-color="sanitary"] { background: #ADFF2F; }
+.legend-color[data-color="art-ceramics"] { background: #FFD700; }
+.legend-color[data-color="furniture"] { background: #808080; }
+.legend-color[data-color="building"] { background: #00CED1; }
+.legend-color[data-color="glass"] { background: #32CD32; }
+.legend-color[data-color="household"] { background: #4169E1; }
+.legend-color[data-color="home-decor"] { background: #CD5C5C; }
+.legend-color[data-color="clocks"] { background: #000080; }
+.legend-color[data-color="gifts"] { background: #D2691E; }
+.legend-color[data-color="stone"] { background: #FF69B4; }
+.legend-color[data-color="international-d"] { background: #FF69B4; }
+
+/* Стили для маркеров павильонов */
+.building-marker {
+    position: relative;
+    opacity: 0.7;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+    font-size: 11px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    border-radius: 2px;
+}
+
+.building-marker:hover {
+    opacity: 0.9;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+    z-index: 1000 !important;
+}
+
+.building-marker.highlighted {
+    opacity: 0.9;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.08);
+    z-index: 1001 !important;
+}
+
+.building-marker.selected {
+    opacity: 1;
+    border-width: 3px;
+    border-color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    z-index: 1002 !important;
+}
+
+/* Контейнер здания */
+.building-container {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+/* Части зданий внутри контейнера */
+.building-part {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* Номер здания */
+.building-number {
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* SVG номер здания */
+.building-number-svg {
+    pointer-events: none !important;
+}
+
+
+/* Скрыть стандартные элементы Leaflet */
+.leaflet-control-zoom {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.leaflet-control-attribution {
+    font-size: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .legend-panel {
+        max-width: 600px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 200px;
+    }
+    
+    .search-box input {
+        width: 250px;
+    }
+    
+    .legend-panel {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+        left: 5%;
+    }
+}

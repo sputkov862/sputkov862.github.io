@@ -1,0 +1,791 @@
+{
+  "mapSettings": {
+    "width": 1000,
+    "height": 700,
+    "imageFile": "map-background.png"
+  },
+  "phases": {
+    "1": {
+      "title": "Фаза 1",
+      "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 1)",
+      "categories": {
+        "cat1": "Категория 1",
+        "cat2": "Категория 2",
+        "cat3": "Категория 3"
+      },
+      "buildings": [
+        {
+          "number": "9.1",
+          "name": "Павильон 9.1",
+          "x": 200,
+          "y": 200,
+          "width": 80,
+          "height": 50,
+          "parts": [
+            {
+              "category": "cat1",
+              "color": "#4A5568"
+            }
+          ]
+        },
+        {
+          "number": "9.2",
+          "name": "Павильон 9.2",
+          "x": 200,
+          "y": 270,
+          "width": 80,
+          "height": 50,
+          "parts": [
+            {
+              "category": "cat1",
+              "color": "#D946EF"
+            },
+            {
+              "category": "cat2",
+              "color": "#22C55E"
+            }
+          ]
+        },
+        {
+          "number": "9.3",
+          "name": "Павильон 9.3",
+          "x": 200,
+          "y": 340,
+          "width": 80,
+          "height": 50,
+          "parts": [
+            {
+              "category": "cat1",
+              "color": "#F59E0B"
+            }
+          ]
+        },
+        {
+          "number": "6.1",
+          "name": "Павильон 6.1",
+          "x": 250,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "electronics",
+              "color": "#60A5FA"
+            },
+            {
+              "fraction": "1/2",
+              "category": "appliances",
+              "color": "#F59E0B"
+            }
+          ]
+        },
+        {
+          "number": "6.0",
+          "name": "Павильон 6.0",
+          "x": 300,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "electronics",
+              "color": "#93C5FD"
+            }
+          ]
+        },
+        {
+          "number": "2.1",
+          "name": "Павильон 2.1",
+          "x": 200,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "appliances",
+              "color": "#F59E0B"
+            }
+          ]
+        },
+        {
+          "number": "3.1",
+          "name": "Павильон 3.1",
+          "x": 250,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "2/3",
+              "category": "appliances",
+              "color": "#FBBF24"
+            },
+            {
+              "fraction": "1/3",
+              "category": "international1",
+              "color": "#EC4899"
+            }
+          ]
+        },
+        {
+          "number": "4.1",
+          "name": "Павильон 4.1",
+          "x": 300,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "international1",
+              "color": "#FCD34D"
+            }
+          ]
+        },
+        {
+          "number": "5.1",
+          "name": "Павильон 5.1",
+          "x": 350,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "vehicles",
+              "color": "#FDE68A"
+            }
+          ]
+        },
+        {
+          "number": "7.1",
+          "name": "Павильон 7.1",
+          "x": 450,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/4",
+              "category": "electronic",
+              "color": "#10B981"
+            },
+            {
+              "fraction": "1/4",
+              "category": "lighting",
+              "color": "#34D399"
+            },
+            {
+              "fraction": "1/4",
+              "category": "energy",
+              "color": "#6EE7B7"
+            },
+            {
+              "fraction": "1/4",
+              "category": "bicycles",
+              "color": "#A7F3D0"
+            }
+          ]
+        },
+        {
+          "number": "9.1",
+          "name": "Павильон 9.1",
+          "x": 500,
+          "y": 400,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "hardware",
+              "color": "#EC4899"
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "title": "Фаза 2",
+      "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 2)",
+      "categories": {
+        "festival": "Праздничные товары",
+        "kitchenware": "Кухонная посуда и столовые приборы",
+        "ceramics": "Общая керамика",
+        "international2": "Международный павильон",
+        "gardening": "Садово-огородные товары",
+        "weaving": "Плетёные, ротанговые и железные изделия",
+        "homeDecor": "Домашние украшения",
+        "gifts": "Подарки и сувениры",
+        "clocks": "Часы и оптические приборы",
+        "glass": "Стеклянные изделия",
+        "household": "Бытовые товары",
+        "sanitary": "Сантехническое и душевое оборудование",
+        "artCeramics": "Художественная керамика",
+        "furniture": "Мебель",
+        "building": "Строительные и отделочные материалы",
+        "stone": "Каменные/железные украшения и оборудование для открытого СПА"
+      },
+      "buildings": [
+        {
+          "number": "1.1",
+          "name": "Павильон 1.1",
+          "x": 200,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "festival",
+              "color": "#3B82F6"
+            }
+          ]
+        },
+        {
+          "number": "6.1",
+          "name": "Павильон 6.1",
+          "x": 250,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "festival",
+              "color": "#60A5FA"
+            }
+          ]
+        },
+        {
+          "number": "6.0",
+          "name": "Павильон 6.0",
+          "x": 300,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "festival",
+              "color": "#93C5FD"
+            }
+          ]
+        },
+        {
+          "number": "2.1",
+          "name": "Павильон 2.1",
+          "x": 200,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "ceramics",
+              "color": "#F59E0B"
+            }
+          ]
+        },
+        {
+          "number": "3.1",
+          "name": "Павильон 3.1",
+          "x": 250,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "ceramics",
+              "color": "#FBBF24"
+            },
+            {
+              "fraction": "1/2",
+              "category": "kitchenware",
+              "color": "#2563EB"
+            }
+          ]
+        },
+        {
+          "number": "4.1",
+          "name": "Павильон 4.1",
+          "x": 300,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "ceramics",
+              "color": "#FCD34D"
+            }
+          ]
+        },
+        {
+          "number": "5.1",
+          "name": "Павильон 5.1",
+          "x": 350,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "ceramics",
+              "color": "#FDE68A"
+            }
+          ]
+        },
+        {
+          "number": "7.1",
+          "name": "Павильон 7.1",
+          "x": 450,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/3",
+              "category": "gardening",
+              "color": "#10B981"
+            },
+            {
+              "fraction": "1/3",
+              "category": "weaving",
+              "color": "#34D399"
+            },
+            {
+              "fraction": "1/3",
+              "category": "international2",
+              "color": "#EC4899"
+            }
+          ]
+        },
+        {
+          "number": "9.1",
+          "name": "Павильон 9.1",
+          "x": 500,
+          "y": 400,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "international2",
+              "color": "#EC4899"
+            }
+          ]
+        },
+        {
+          "number": "10.3",
+          "name": "Павильон 10.3",
+          "x": 750,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "furniture",
+              "color": "#9CA3AF"
+            },
+            {
+              "fraction": "1/2",
+              "category": "building",
+              "color": "#22D3EE"
+            }
+          ]
+        },
+        {
+          "number": "14.1",
+          "name": "Павильон 14.1",
+          "x": 550,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "glass",
+              "color": "#10B981"
+            }
+          ]
+        },
+        {
+          "number": "14.3",
+          "name": "Павильон 14.3",
+          "x": 550,
+          "y": 550,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "household",
+              "color": "#8B5CF6"
+            }
+          ]
+        },
+        {
+          "number": "17.1",
+          "name": "Павильон 17.1",
+          "x": 150,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "homeDecor",
+              "color": "#EF4444"
+            }
+          ]
+        },
+        {
+          "number": "17.2",
+          "name": "Павильон 17.2",
+          "x": 150,
+          "y": 550,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "gifts",
+              "color": "#B45309"
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "title": "Фаза 3",
+      "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 3)",
+      "categories": {
+        "clothing": "Мужская и женская одежда",
+        "kids": "Детская одежда",
+        "shoes": "Обувь",
+        "furs": "Меха, кожа, пух и сопутствующие товары",
+        "carpets": "Ковры и гобелены",
+        "sports": "Спортивная и повседневная одежда",
+        "underwear": "Нижнее бельё",
+        "accessories": "Модные аксессуары и фурнитура",
+        "chinese": "Традиционные китайские товары",
+        "toys": "Игрушки",
+        "bags": "Чемоданы и сумки",
+        "baby": "Товары для детей, младенцев и беременных",
+        "healthcare": "Интеллектуальное здравоохранение",
+        "textiles": "Домашний текстиль",
+        "fabrics": "Текстильное сырьё и ткани",
+        "international3": "Международный павильон",
+        "care": "Средства личной гигиены",
+        "toiletries": "Туалетные принадлежности",
+        "medicine": "Лекарства, товары для здоровья и медицинские изделия",
+        "office": "Канцелярские товары",
+        "pets": "Товары для домашних животных и корма",
+        "recreation": "Спортивные, туристические и развлекательные товары",
+        "food": "Продукты питания"
+      },
+      "buildings": [
+        {
+          "number": "1.1",
+          "name": "Павильон 1.1",
+          "x": 200,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "clothing",
+              "color": "#EF4444"
+            }
+          ]
+        },
+        {
+          "number": "6.1",
+          "name": "Павильон 6.1",
+          "x": 250,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "clothing",
+              "color": "#F87171"
+            },
+            {
+              "fraction": "1/2",
+              "category": "kids",
+              "color": "#FCA5A5"
+            }
+          ]
+        },
+        {
+          "number": "6.0",
+          "name": "Павильон 6.0",
+          "x": 300,
+          "y": 300,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "kids",
+              "color": "#FCA5A5"
+            }
+          ]
+        },
+        {
+          "number": "2.1",
+          "name": "Павильон 2.1",
+          "x": 200,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "shoes",
+              "color": "#FBBF24"
+            }
+          ]
+        },
+        {
+          "number": "3.1",
+          "name": "Павильон 3.1",
+          "x": 250,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "shoes",
+              "color": "#FCD34D"
+            },
+            {
+              "fraction": "1/2",
+              "category": "furs",
+              "color": "#B45309"
+            }
+          ]
+        },
+        {
+          "number": "4.1",
+          "name": "Павильон 4.1",
+          "x": 300,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "furs",
+              "color": "#B45309"
+            }
+          ]
+        },
+        {
+          "number": "5.1",
+          "name": "Павильон 5.1",
+          "x": 350,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/3",
+              "category": "carpets",
+              "color": "#D97706"
+            },
+            {
+              "fraction": "1/3",
+              "category": "sports",
+              "color": "#10B981"
+            },
+            {
+              "fraction": "1/3",
+              "category": "underwear",
+              "color": "#34D399"
+            }
+          ]
+        },
+        {
+          "number": "7.1",
+          "name": "Павильон 7.1",
+          "x": 450,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "international3",
+              "color": "#EC4899"
+            },
+            {
+              "fraction": "1/2",
+              "category": "care",
+              "color": "#FB7185"
+            }
+          ]
+        },
+        {
+          "number": "8.1",
+          "name": "Павильон 8.1",
+          "x": 500,
+          "y": 350,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/4",
+              "category": "toiletries",
+              "color": "#FDA4AF"
+            },
+            {
+              "fraction": "1/4",
+              "category": "medicine",
+              "color": "#FECDD3"
+            },
+            {
+              "fraction": "1/4",
+              "category": "office",
+              "color": "#60A5FA"
+            },
+            {
+              "fraction": "1/4",
+              "category": "pets",
+              "color": "#93C5FD"
+            }
+          ]
+        },
+        {
+          "number": "9.1",
+          "name": "Павильон 9.1",
+          "x": 500,
+          "y": 400,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "recreation",
+              "color": "#BFDBFE"
+            }
+          ]
+        },
+        {
+          "number": "10.1",
+          "name": "Павильон 10.1",
+          "x": 750,
+          "y": 200,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "food",
+              "color": "#DBEAFE"
+            }
+          ]
+        },
+        {
+          "number": "14.1",
+          "name": "Павильон 14.1",
+          "x": 550,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "baby",
+              "color": "#A855F7"
+            },
+            {
+              "fraction": "1/2",
+              "category": "healthcare",
+              "color": "#C084FC"
+            }
+          ]
+        },
+        {
+          "number": "15.1",
+          "name": "Павильон 15.1",
+          "x": 650,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "textiles",
+              "color": "#E9D5FF"
+            },
+            {
+              "fraction": "1/2",
+              "category": "fabrics",
+              "color": "#DDD6FE"
+            }
+          ]
+        },
+        {
+          "number": "17.1",
+          "name": "Павильон 17.1",
+          "x": 150,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "accessories",
+              "color": "#6EE7B7"
+            }
+          ]
+        },
+        {
+          "number": "18.1",
+          "name": "Павильон 18.1",
+          "x": 200,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/2",
+              "category": "chinese",
+              "color": "#EC4899"
+            },
+            {
+              "fraction": "1/2",
+              "category": "toys",
+              "color": "#F472B6"
+            }
+          ]
+        },
+        {
+          "number": "19.1",
+          "name": "Павильон 19.1",
+          "x": 250,
+          "y": 500,
+          "width": 60,
+          "height": 30,
+          "sections": [
+            {
+              "fraction": "1/1",
+              "category": "bags",
+              "color": "#DB2777"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
