@@ -3,11 +3,13 @@
 // ============================================================================
 
 let config = null;
-let currentPhase = '2';
+let currentPhase = '1';
 let map = null;
 let markers = [];
 let selectedBuilding = null;
 let highlightedCategory = null;
+let isCategoryLocked = false; // Флаг для отслеживания фиксации категории кликом
+let clickedRectangle = null; // Ссылка на конкретный кликнутый прямоугольник
 
 // ============================================================================
 // ЗАГРУЗКА КОНФИГУРАЦИИ
@@ -33,14 +35,23 @@ const MAP_WIDTH = 1000;
 const MAP_HEIGHT = 700;
 
 function initMap() {
+    // Определяем, мобильное ли устройство
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
     map = L.map('map', {
         crs: L.CRS.Simple,
-        minZoom: -1,
-        maxZoom: 2,
-        zoomControl: true,
+        minZoom: isMobile ? -2 : -1,
+        maxZoom: isSmallMobile ? 1.5 : 2,
+        zoomControl: false,
         attributionControl: false,
         zoomSnap: 0.25,
-        zoomDelta: 0.5
+        zoomDelta: isMobile ? 0.25 : 0.5,
+        tap: true, // Включаем поддержку тач-событий
+        touchZoom: true,
+        dragging: true,
+        doubleClickZoom: true,
+        boxZoom: false
     });
 
     const bounds = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
@@ -67,6 +78,15 @@ function initMap() {
         [-50, -50],
         [MAP_HEIGHT + 50, MAP_WIDTH + 50]
     ]);
+    
+    // Обработчик клика на пустое место карты для снятия выделения
+    map.on('click', function(e) {
+        // Проверяем, был ли клик на объекте или на пустом месте
+        // Если на пустом месте - снимаем выделение
+        if (isCategoryLocked) {
+            clearSelection();
+        }
+    });
 }
 
 // ============================================================================
@@ -123,7 +143,7 @@ function createBuildingMarker(building) {
             color: lighterBorder,
             weight: 1,
             fillColor: color,
-            fillOpacity: 0.7,
+            fillOpacity: 1,
             interactive: true
         });
         
@@ -136,8 +156,9 @@ function createBuildingMarker(building) {
         };
         
         // Обработчики событий
-        rectangle.on('click', () => {
-            handlePartClick(building, partIndex, part);
+        rectangle.on('click', (e) => {
+            L.DomEvent.stopPropagation(e); // Останавливаем всплытие события к карте
+            handlePartClick(building, partIndex, part, rectangle);
         });
         
         rectangle.on('mouseover', function(e) {
@@ -146,20 +167,31 @@ function createBuildingMarker(building) {
             
             const buildingName = `Павильон ${building.number}`;
             const zone = categoryData.zone || '';
-            const tooltip = `<div style="font-size: 12px;">
-                <strong>${buildingName}</strong><br>
-                ${zone ? `${zone}<br>` : ''}
-                ${categoryData.name}
+            const tooltip = `<div class="tooltip-content">
+                <div class="tooltip-header">${buildingName}</div>
+                ${zone ? `<div class="tooltip-zone">${zone}</div>` : ''}
+                <div class="tooltip-category">${categoryData.name}</div>
             </div>`;
+            
+            // Вычисляем динамический offset на основе текущего зума
+            const currentZoom = map.getZoom();
+            const zoomFactor = Math.pow(2, currentZoom);
+            const baseOffset = 20; // Базовый отступ в единицах карты
+            const pixelOffset = baseOffset * zoomFactor;
             
             this.bindTooltip(tooltip, {
                 direction: 'top',
-                className: 'custom-tooltip'
+                className: 'custom-tooltip',
+                offset: [0, -pixelOffset],
+                opacity: 1,
+                permanent: false,
+                sticky: false
             }).openTooltip();
         });
         
         rectangle.on('mouseout', function() {
-            if (!selectedBuilding) {
+            // Не снимаем выделение, если категория зафиксирована кликом
+            if (!isCategoryLocked) {
                 highlightedCategory = null;
                 updateMarkers();
             }
@@ -222,27 +254,30 @@ function createBuildingMarker(building) {
 // ОБРАБОТЧИКИ СОБЫТИЙ
 // ============================================================================
 
-function handlePartClick(building, partIndex, part) {
-    if (selectedBuilding && 
-        selectedBuilding.number === building.number && 
-        selectedBuilding.partIndex === partIndex) {
+function handlePartClick(building, partIndex, part, rectangle) {
+    // Если кликнули на тот же объект, снимаем выделение
+    if (clickedRectangle === rectangle && isCategoryLocked) {
         clearSelection();
         return;
     }
     
-    selectedBuilding = { number: building.number, partIndex: partIndex };
+    // Выделяем новую категорию или фиксируем текущую
+    selectedBuilding = null;
     highlightedCategory = part.category;
+    isCategoryLocked = true; // Фиксируем выделение
+    clickedRectangle = rectangle; // Запоминаем кликнутый прямоугольник
     
     updateMarkers();
     updateSidebarSelection(part.category);
     
     // Центрируем карту на части
-    map.setView([part.y, part.x], map.getZoom(), { animate: true });
+    map.setView([part.y + part.height / 2, part.x + part.width / 2], map.getZoom(), { animate: true });
 }
 
 function clearSelection() {
     selectedBuilding = null;
     highlightedCategory = null;
+    isCategoryLocked = false; // Снимаем фиксацию
     updateMarkers();
     updateSidebarSelection(null);
 }
@@ -266,17 +301,25 @@ function updateMarkers() {
                 // При выделении: толще граница и ярче цвет
                 rectangle.setStyle({
                     color: lighterBorder,
-                    weight: 3,
+                    weight: 5,
                     fillColor: color,
-                    fillOpacity: 0.85
+                    fillOpacity: 1
                 });
-            } else {
-                // Обычное состояние
+            } else if (highlightedCategory && partData.category !== highlightedCategory) {
+                // Невыделенные категории - полупрозрачные (когда есть выделение)
                 rectangle.setStyle({
                     color: lighterBorder,
                     weight: 1,
                     fillColor: color,
-                    fillOpacity: 0.7
+                    fillOpacity: 0.3
+                });
+            } else {
+                // Обычное состояние (нет выделения)
+                rectangle.setStyle({
+                    color: lighterBorder,
+                    weight: 1,
+                    fillColor: color,
+                    fillOpacity: 1
                 });
             }
         });
@@ -333,17 +376,18 @@ function updateSidebar() {
         li.className = 'category-item';
         li.dataset.category = categoryKey;
         li.textContent = categoryData.name;
-        li.style.borderLeft = `4px solid ${categoryData.color}`;
-        li.style.paddingLeft = '8px';
+        li.style.borderLeft = `12px solid ${categoryData.color}`;
+        li.style.paddingLeft = '12px';
         
         li.addEventListener('click', () => {
             const category = li.dataset.category;
             
-            if (highlightedCategory === category) {
+            if (highlightedCategory === category && isCategoryLocked) {
                 clearSelection();
             } else {
                 selectedBuilding = null;
                 highlightedCategory = category;
+                isCategoryLocked = true; // Фиксируем выделение при клике на категорию
                 updateMarkers();
                 updateSidebarSelection(category);
             }
@@ -354,23 +398,16 @@ function updateSidebar() {
 }
 
 // ============================================================================
-// ОБНОВЛЕНИЕ ЗАГОЛОВКОВ
-// ============================================================================
-
-function updateTitles() {
-    const phaseData = config.phases[currentPhase];
-    document.getElementById('sidebarTitle').textContent = phaseData.title;
-    document.getElementById('mapTitle').textContent = phaseData.mapTitle;
-}
-
-// ============================================================================
 // ПЕРЕКЛЮЧЕНИЕ ФАЗ
 // ============================================================================
 
 function switchPhase(phase) {
     currentPhase = phase;
+    
+    // Сохраняем выбранную фазу в localStorage
+    localStorage.setItem('selectedPhase', phase);
+    
     clearSelection();
-    updateTitles();
     updateSidebar();
     renderBuildings();
     
@@ -379,50 +416,6 @@ function switchPhase(phase) {
         btn.classList.remove('active');
         if (btn.dataset.phase === phase) {
             btn.classList.add('active');
-        }
-    });
-}
-
-// ============================================================================
-// ПОИСК
-// ============================================================================
-
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        
-        if (query === '') {
-            clearSelection();
-            return;
-        }
-        
-        const phaseData = config.phases[currentPhase];
-        const buildings = phaseData.buildings;
-        const categories = phaseData.categories;
-        
-        // Ищем по номеру здания
-        let foundBuilding = buildings.find(b => 
-            b.number.toLowerCase().includes(query) || 
-            b.name.toLowerCase().includes(query)
-        );
-        
-        if (foundBuilding) {
-            handleBuildingClick(foundBuilding);
-            return;
-        }
-        
-        // Ищем по категории
-        const foundCategory = Object.keys(categories).find(key =>
-            categories[key].name.toLowerCase().includes(query)
-        );
-        
-        if (foundCategory) {
-            selectedBuilding = null;
-            highlightedCategory = foundCategory;
-            updateMarkers();
-            updateSidebarSelection(foundCategory);
         }
     });
 }
@@ -442,14 +435,30 @@ async function init() {
         return;
     }
     
+    // Загружаем сохраненную фазу из localStorage, если она есть
+    // Если нет - используем фазу 1 по умолчанию
+    const savedPhase = localStorage.getItem('selectedPhase');
+    if (savedPhase && config.phases[savedPhase]) {
+        currentPhase = savedPhase;
+    } else {
+        // При первом посещении устанавливаем фазу 1
+        currentPhase = '1';
+    }
+    
     // Инициализируем карту
     initMap();
     
     // Обновляем интерфейс
-    updateTitles();
     updateSidebar();
     renderBuildings();
-    setupSearch();
+    
+    // Устанавливаем активную кнопку фазы (убираем все active и добавляем нужной)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.phase === currentPhase) {
+            btn.classList.add('active');
+        }
+    });
     
     // Обработчики переключения фаз
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -461,6 +470,48 @@ async function init() {
     
     console.log('Приложение инициализировано');
 }
+
+// ============================================================================
+// АДАПТИВНОСТЬ И ОБРАБОТКА ИЗМЕНЕНИЙ ЭКРАНА
+// ============================================================================
+
+// Обработка изменения размера окна и ориентации
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        if (map) {
+            map.invalidateSize();
+            console.log('Размер карты обновлен');
+        }
+    }, 250);
+});
+
+// Обработка изменения ориентации на мобильных
+window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+        if (map) {
+            map.invalidateSize();
+            console.log('Ориентация изменена, карта обновлена');
+        }
+    }, 300);
+});
+
+// Предотвращение случайного зума при двойном тапе на iOS
+document.addEventListener('touchstart', function(event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
 
 // Запускаем приложение после загрузки DOM
 document.addEventListener('DOMContentLoaded', init);

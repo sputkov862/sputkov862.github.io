@@ -10,109 +10,109 @@
       "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 1)",
       "categories": {
         "cat1": {
-          "name": "Потребительская электроника и информационные продукты",
-          "color": "#3B82F6",
+          "name": "Бытовая электроника и информационные продукты",
+          "color": "#EC7A7C",
           "zone": "Зона A"
         },
         "cat2": {
           "name": "Бытовая электротехника",
-          "color": "#10B981",
+          "color": "#1B499D",
           "zone": "Зона A"
         },
         "cat3": {
           "name": "Международный павильон",
-          "color": "#8B5CF6",
+          "color": "#CB4293",
           "zone": "Зона A"
         },
         "cat4": {
-          "name": "Новые энергетические автомобили и умная мобильность",
-          "color": "#06B6D4",
-          "zone": "Зона B"
+          "name": "Транспортные средства на новых источниках энергии и интеллектуальная мобильность",
+          "color": "#2A72BA",
+          "zone": "Зона А"
         },
         "cat5": {
           "name": "Строительная техника",
-          "color": "#F59E0B",
-          "zone": "Зона C"
+          "color": "#77764A",
+          "zone": "Зона А"
         },
         "cat6": {
           "name": "Сельскохозяйственная техника",
-          "color": "#84CC16",
-          "zone": "Зона C"
+          "color": "#24973A",
+          "zone": "Зона А"
         },
         "cat7": {
-          "name": "Энергетическое оборудование и электроэнергия",
-          "color": "#EAB308",
+          "name": "Энергетическое машиностроение и электроэнергетика",
+          "color": "#B5885B",
           "zone": "Зона D"
         },
         "cat8": {
           "name": "Новые материалы и химические продукты",
-          "color": "#A855F7",
+          "color": "#18AEAD",
           "zone": "Зона D"
         },
         "cat9": {
-          "name": "Общее машиностроение и механические базовые части",
-          "color": "#64748B",
-          "zone": "Зона E"
+          "name": "Общее машиностроение и основные механические детали",
+          "color": "#F7D97F",
+          "zone": "Зона D"
         },
         "cat10": {
-          "name": "Обрабатывающее оборудование",
-          "color": "#94A3B8",
-          "zone": "Зона E"
+          "name": "Оборудование для обработки",
+          "color": "#4B9036",
+          "zone": "Зона D"
         },
         "cat11": {
           "name": "Промышленная автоматизация и интеллектуальное производство",
-          "color": "#6366F1",
-          "zone": "Зона F"
+          "color": "#71C6D7",
+          "zone": "Зона D"
         },
         "cat12": {
           "name": "Сервисные роботы",
-          "color": "#EC4899",
-          "zone": "Зона F"
+          "color": "#FF7F7F",
+          "zone": "Зона D"
         },
         "cat13": {
           "name": "Мотоциклы",
-          "color": "#EF4444",
-          "zone": "Зона G"
+          "color": "#7D7C7F",
+          "zone": "Зона С"
         },
         "cat14": {
-          "name": "Электронные и электрические изделия",
-          "color": "#0EA5E9",
-          "zone": "Зона G"
+          "name": "Электронные и электротехнические изделия",
+          "color": "#EDE937",
+          "zone": "Зона С"
         },
         "cat15": {
           "name": "Осветительное оборудование",
-          "color": "#FBBF24",
-          "zone": "Зона H"
+          "color": "#B185BA",
+          "zone": "Зона С"
         },
         "cat16": {
-          "name": "Новые источники энергии",
-          "color": "#22C55E",
-          "zone": "Зона H"
+          "name": "Новые энергетические ресурсы",
+          "color": "#6AB92F",
+          "zone": "Зона С"
         },
         "cat17": {
           "name": "Велосипеды",
-          "color": "#14B8A6",
-          "zone": "Зона I"
+          "color": "#F07E18",
+          "zone": "Зона С"
         },
         "cat18": {
-          "name": "Скобяные изделия",
-          "color": "#78716C",
-          "zone": "Зона I"
+          "name": "Аппаратное обеспечение",
+          "color": "#57449A",
+          "zone": "Зона Б"
         },
         "cat19": {
           "name": "Инструменты",
-          "color": "#DC2626",
-          "zone": "Зона J"
+          "color": "#92C976",
+          "zone": "Зона Б"
         },
         "cat20": {
-          "name": "Автозапчасти",
-          "color": "#F97316",
-          "zone": "Зона J"
+          "name": "Запасные части для автомобилей",
+          "color": "#D5A113",
+          "zone": "Зона Б"
         },
         "cat21": {
           "name": "Транспортные средства",
-          "color": "#7C3AED",
-          "zone": "Зона K"
+          "color": "#7FBFFF",
+          "zone": "Зона Б"
         }
       },
       "buildings": [
@@ -135,7 +135,7 @@
             }
           ]
         },
-          {
+        {
           "number": "2.1",
           "parts": [
             {
@@ -154,7 +154,7 @@
             }
           ]
         },
-          {
+        {
           "number": "3.1",
           "parts": [
             {
@@ -166,7 +166,7 @@
             }
           ]
         },
-         {
+        {
           "number": "4.1",
           "parts": [
             {
@@ -178,7 +178,7 @@
             }
           ]
         },
-          {
+        {
           "number": "5.1",
           "parts": [
             {
@@ -190,7 +190,7 @@
             }
           ]
         },
-          {
+        {
           "number": "1.2",
           "parts": [
             {
@@ -202,7 +202,7 @@
             }
           ]
         },
-           {
+        {
           "number": "2.2",
           "parts": [
             {
@@ -214,7 +214,7 @@
             }
           ]
         },
-         {
+        {
           "number": "3.2",
           "parts": [
             {
@@ -226,7 +226,7 @@
             }
           ]
         },
-          {
+        {
           "number": "4.2",
           "parts": [
             {
@@ -238,7 +238,7 @@
             }
           ]
         },
-             {
+        {
           "number": "5.2",
           "parts": [
             {
@@ -250,7 +250,7 @@
             }
           ]
         },
-             {
+        {
           "number": "1.1Y",
           "parts": [
             {
@@ -286,7 +286,7 @@
             }
           ]
         },
-          {
+        {
           "number": "4.1Y",
           "parts": [
             {
@@ -298,7 +298,7 @@
             }
           ]
         },
-          {
+        {
           "number": "5.1Y",
           "parts": [
             {
@@ -309,34 +309,181 @@
               "category": "cat2"
             }
           ]
-        }
-      ]
-    },
-    "2": {
-      "title": "Фаза 2",
-      "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 2)",
-      "categories": {
-        "cat4": {
-          "name": "Категория 4",
-          "color": "#3B82F6",
-          "zone": "Зона D"
         },
-        "cat5": {
-          "name": "Категория 5",
-          "color": "#10B981",
-          "zone": "Зона E"
-        }
-      },
-      "buildings": [
+        {
+          "number": "21.2",
+          "parts": [
+            {
+              "x": 322,
+              "y": 403,
+              "width": 22,
+              "height": 30,
+              "category": "cat12"
+            }
+          ]
+        },
+        {
+          "number": "20.2",
+          "parts": [
+            {
+              "x": 271,
+              "y": 408,
+              "width": 40,
+              "height": 50,
+              "category": "cat9"
+            }
+          ]
+        },
+        {
+          "number": "19.2",
+          "parts": [
+            {
+              "x": 220,
+              "y": 408,
+              "width": 40,
+              "height": 50,
+              "category": "cat9"
+            }
+          ]
+        },
+        {
+          "number": "18.2",
+          "parts": [
+            {
+              "x": 169,
+              "y": 408,
+              "width": 40,
+              "height": 50,
+              "category": "cat9"
+            }
+          ]
+        },
+        {
+          "number": "17.2",
+          "parts": [
+            {
+              "x": 118,
+              "y": 408,
+              "width": 40,
+              "height": 50,
+              "category": "cat8"
+            },
+            {
+              "x": 136,
+              "y": 408,
+              "width": 22,
+              "height": 20,
+              "category": "cat9"
+            }
+          ]
+        },
+        {
+          "number": "20.1",
+          "parts": [
+            {
+              "x": 292,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat11"
+            },
+            {
+              "x": 292,
+              "y": 340,
+              "width": 20,
+              "height": 26,
+              "category": "cat10"
+            }
+          ]
+        },
+        {
+          "number": "19.1",
+          "parts": [
+            {
+              "x": 241,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat10"
+            }
+          ]
+        },
+        {
+          "number": "18.1",
+          "parts": [
+            {
+              "x": 190,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat10"
+            },
+            {
+              "x": 190,
+              "y": 340,
+              "width": 22,
+              "height": 50,
+              "category": "cat7"
+            }
+          ]
+        },
+        {
+          "number": "17.1",
+          "parts": [
+            {
+              "x": 141,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat7"
+            }
+          ]
+        },
+        {
+          "number": "11.1",
+          "parts": [
+            {
+              "x": 867,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat18"
+            }
+          ]
+        },
         {
           "number": "10.1",
           "parts": [
             {
-              "x": 450,
-              "y": 200,
-              "width": 80,
+              "x": 820,
+              "y": 340,
+              "width": 40,
               "height": 50,
-              "category": "cat4"
+              "category": "cat18"
+            }
+          ]
+        },
+        {
+          "number": "9.1",
+          "parts": [
+            {
+              "x": 773,
+              "y": 340,
+              "width": 40,
+              "height": 50,
+              "category": "cat18"
+            }
+          ]
+        },
+        {
+          "number": "11.2",
+          "parts": [
+            {
+              "x": 851,
+              "y": 396,
+              "width": 40,
+              "height": 50,
+              "category": "cat19"
             }
           ]
         },
@@ -344,39 +491,513 @@
           "number": "10.2",
           "parts": [
             {
-              "x": 450,
-              "y": 270,
-              "width": 80,
+              "x": 804,
+              "y": 396,
+              "width": 40,
               "height": 50,
+              "category": "cat19"
+            }
+          ]
+        },
+        {
+          "number": "9.2",
+          "parts": [
+            {
+              "x": 757,
+              "y": 396,
+              "width": 40,
+              "height": 50,
+              "category": "cat19"
+            },
+            {
+              "x": 757,
+              "y": 396,
+              "width": 20,
+              "height": 25,
+              "category": "cat3"
+            },
+            {
+              "x": 757,
+              "y": 421,
+              "width": 20,
+              "height": 25,
+              "category": "cat20"
+            }
+          ]
+        },
+        {
+          "number": "11.3",
+          "parts": [
+            {
+              "x": 831,
+              "y": 451,
+              "width": 40,
+              "height": 50,
+              "category": "cat20"
+            }
+          ]
+        },
+        {
+          "number": "10.3",
+          "parts": [
+            {
+              "x": 785,
+              "y": 451,
+              "width": 40,
+              "height": 50,
+              "category": "cat20"
+            }
+          ]
+        },
+        {
+          "number": "9.3",
+          "parts": [
+            {
+              "x": 739,
+              "y": 451,
+              "width": 40,
+              "height": 50,
+              "category": "cat20"
+            }
+          ]
+        },
+        {
+          "number": "13.1",
+          "parts": [
+            {
+              "x": 871,
+              "y": 518,
+              "width": 40,
+              "height": 50,
+              "category": "cat18"
+            },
+            {
+              "x": 871,
+              "y": 538,
+              "width": 21,
+              "height": 30,
+              "category": "cat19"
+            }
+          ]
+        },
+        {
+          "number": "12.1",
+          "parts": [
+            {
+              "x": 825,
+              "y": 518,
+              "width": 40,
+              "height": 50,
+              "category": "cat19"
+            }
+          ]
+        },
+        {
+          "number": "13.2",
+          "parts": [
+            {
+              "x": 856,
+              "y": 573,
+              "width": 40,
+              "height": 50,
+              "category": "cat19"
+            }
+          ]
+        },
+        {
+          "number": "12.2",
+          "parts": [
+            {
+              "x": 811,
+              "y": 573,
+              "width": 40,
+              "height": 50,
+              "category": "cat19"
+            }
+          ]
+        },
+        {
+          "number": "13.0",
+          "parts": [
+            {
+              "x": 871,
+              "y": 632,
+              "width": 40,
+              "height": 23,
+              "category": "cat21"
+            }
+          ]
+        },
+        {
+          "number": "12.0",
+          "parts": [
+            {
+              "x": 827,
+              "y": 632,
+              "width": 40,
+              "height": 23,
               "category": "cat5"
             }
           ]
+        },
+        {
+          "number": "9.0",
+          "parts": [
+            {
+              "x": 782,
+              "y": 632,
+              "width": 40,
+              "height": 23,
+              "category": "cat5"
+            },
+            {
+              "x": 782,
+              "y": 632,
+              "width": 15,
+              "height": 23,
+              "category": "cat6"
+            }
+          ]
+        },
+        {
+          "number": "8.0",
+          "parts": [
+            {
+              "x": 619,
+              "y": 560,
+              "width": 40,
+              "height": 23,
+              "category": "cat6"
+            }
+          ]
+        },
+        {
+          "number": "8.0",
+          "parts": [
+            {
+              "x": 573,
+              "y": 560,
+              "width": 40,
+              "height": 23,
+              "category": "cat6"
+            },
+            {
+              "x": 573,
+              "y": 560,
+              "width": 19,
+              "height": 23,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "8.0",
+          "parts": [
+            {
+              "x": 527,
+              "y": 560,
+              "width": 40,
+              "height": 23,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "6.0",
+          "parts": [
+            {
+              "x": 433,
+              "y": 560,
+              "width": 40,
+              "height": 23,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "6.1",
+          "parts": [
+            {
+              "x": 433,
+              "y": 501,
+              "width": 40,
+              "height": 50,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "7.1",
+          "parts": [
+            {
+              "x": 480,
+              "y": 528,
+              "width": 40,
+              "height": 23,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "8.1",
+          "parts": [
+            {
+              "x": 527,
+              "y": 501,
+              "width": 40,
+              "height": 50,
+              "category": "cat1"
+            },
+            {
+              "x": 527,
+              "y": 501,
+              "width": 40,
+              "height": 34,
+              "category": "cat4"
+            }
+          ]
+        },
+        {
+          "number": "3.1Y",
+          "parts": [
+            {
+              "x": 545,
+              "y": 485,
+              "width": 22,
+              "height": 10,
+              "category": "cat2"
+            }
+          ]
+        },
+        {
+          "number": "5.1Y",
+          "parts": [
+            {
+              "x": 637,
+              "y": 485,
+              "width": 22,
+              "height": 10,
+              "category": "cat2"
+            }
+          ]
+        },
+        {
+          "number": "4.0",
+          "parts": [
+            {
+              "x": 573,
+              "y": 528,
+              "width": 40,
+              "height": 23,
+              "category": "cat5"
+            }
+          ]
+        },
+        {
+          "number": "5.0",
+          "parts": [
+            {
+              "x": 619,
+              "y": 535,
+              "width": 40,
+              "height": 16,
+              "category": "cat6"
+            }
+          ]
+        },
+        {
+          "number": "2.1Y",
+          "parts": [
+            {
+              "x": 477,
+              "y": 485,
+              "width": 43,
+              "height": 10,
+              "category": "cat2"
+            },
+            {
+              "x": 477,
+              "y": 485,
+              "width": 22,
+              "height": 10,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "3.2",
+          "parts": [
+            {
+              "x": 451,
+              "y": 485,
+              "width": 22,
+              "height": 10,
+              "category": "cat1"
+            }
+          ]
+        },
+        {
+          "number": "16.4",
+          "parts": [
+            {
+              "x": 671,
+              "y": 223,
+              "width": 40,
+              "height": 50,
+              "category": "cat15"
+            }
+          ]
+        },
+        {
+          "number": "14.4",
+          "parts": [
+            {
+              "x": 553,
+              "y": 223,
+              "width": 40,
+              "height": 50,
+              "category": "cat15"
+            }
+          ]
+        },
+        {
+          "number": "15.4",
+          "parts": [
+            {
+              "x": 601,
+              "y": 223,
+              "width": 40,
+              "height": 50,
+              "category": "cat15"
+            }
+          ]
+        },
+        {
+          "number": "14.3",
+          "parts": [
+            {
+              "x": 575,
+              "y": 155,
+              "width": 40,
+              "height": 50,
+              "category": "cat16"
+            },
+            {
+              "x": 575,
+              "y": 155,
+              "width": 22,
+              "height": 50,
+              "category": "cat15"
+            }
+          ]
+        },
+        {
+          "number": "15.3",
+          "parts": [
+            {
+              "x": 624,
+              "y": 155,
+              "width": 40,
+              "height": 50,
+              "category": "cat16"
+            }
+          ]
+        },
+        {
+          "number": "16.3",
+          "parts": [
+            {
+              "x": 689,
+              "y": 155,
+              "width": 40,
+              "height": 50,
+              "category": "cat14"
+            }
+          ]
+        },
+        {
+          "number": "16.2",
+          "parts": [
+            {
+              "x": 716,
+              "y": 98,
+              "width": 40,
+              "height": 50,
+              "category": "cat17"
+            },
+            {
+              "x": 716,
+              "y": 126,
+              "width": 21,
+              "height": 22,
+              "category": "cat13"
+            }
+          ]
+        },
+        {
+          "number": "15.2",
+          "parts": [
+            {
+              "x": 649,
+              "y": 98,
+              "width": 40,
+              "height": 50,
+              "category": "cat14"
+            }
+          ]
+        },
+        {
+          "number": "14.2",
+          "parts": [
+            {
+              "x": 601,
+              "y": 98,
+              "width": 40,
+              "height": 50,
+              "category": "cat14"
+            }
+          ]
+        },
+        {
+          "number": "15.1",
+          "parts": [
+            {
+              "x": 671,
+              "y": 38,
+              "width": 40,
+              "height": 50,
+              "category": "cat13"
+            }
+          ]
+        },
+        {
+          "number": "14.1",
+          "parts": [
+            {
+              "x": 624,
+              "y": 38,
+              "width": 40,
+              "height": 50,
+              "category": "cat13"
+            }
+          ]
         }
+      ]
+    },
+    "2": {
+      "title": "Фаза 2",
+      "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 2)",
+      "categories": {
+      },
+      "buildings": [
       ]
     },
     "3": {
       "title": "Фаза 3",
       "mapTitle": "Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 3)",
       "categories": {
-        "cat6": {
-          "name": "Категория 6",
-          "color": "#EF4444",
-          "zone": "Зона F"
-        }
       },
       "buildings": [
-        {
-          "number": "11.1",
-          "parts": [
-            {
-              "x": 600,
-              "y": 200,
-              "width": 80,
-              "height": 50,
-              "category": "cat6"
-            }
-          ]
-        }
       ]
     }
   }

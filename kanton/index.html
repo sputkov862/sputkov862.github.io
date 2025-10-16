@@ -2,30 +2,39 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта выставочных секций 138-й Китайской выставки импорта и экспорта</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Карта 138-й Кантонской ярмарки</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="main-container">
-        <!-- Верхняя панель с вкладками и поиском -->
-        <div class="top-bar">
-            <div class="tabs">
-                <button class="tab-btn" data-phase="1">Фаза 1</button>
-                <button class="tab-btn active" data-phase="2">Фаза 2</button>
-                <button class="tab-btn" data-phase="3">Фаза 3</button>
+        <!-- Шапка с логотипом и ссылками -->
+        <header class="header">
+            <div class="header-logo">
+                <img src="logo.png" alt="Логотип компании">
             </div>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Введите ключевые слова выставочной секции">
-            </div>
-        </div>
+            <nav class="header-nav">
+                <a href="https://esd-express.ru" target="_blank" rel="noopener" class="nav-link">Наш сайт</a>
+                <a href="https://t.me/esd_mk_china" target="_blank" rel="noopener" class="nav-link">Telegram</a>
+                <a href="tel:+79605353355" target="_blank" rel="noopener" class="nav-link" >+7(960)535 33 55</a>
+            </nav>
+        </header>
         
         <!-- Основной контент -->
         <div class="content-wrapper">
             <!-- Боковое меню -->
             <div class="sidebar">
-                <h2 class="sidebar-title" id="sidebarTitle">Фаза 2</h2>
+                <!-- Кнопки переключения фаз -->
+                <div class="tabs-sidebar">
+                    <button class="tab-btn" data-phase="1">Фаза 1</button>
+                    <button class="tab-btn" data-phase="2" disabled>Фаза 2</button>
+                    <button class="tab-btn" data-phase="3" disabled>Фаза 3</button>
+                </div>
+                
                 <ul class="category-list" id="categoryList">
                     <!-- Категории будут загружены динамически через JavaScript -->
                 </ul>
@@ -33,10 +42,6 @@
             
             <!-- Карта -->
             <div class="map-container">
-                <h1 class="map-title" id="mapTitle">
-                    Карта выставочных секций 138-й Китайской выставки импорта и экспорта (Фаза 2)
-                </h1>
-                
                 <div id="map"></div>
             </div>
         </div>
