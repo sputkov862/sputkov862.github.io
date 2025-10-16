@@ -1,0 +1,15 @@
+{
+    "data": {
+        "shortenedUrl": {
+            "data": {
+                "originalUrl": "https://esd-express1.github.io/",
+                "qrShortenedUrl": "https://esd-mk.ru",
+                "clckShortenedUrl": "https://esd-mk.ru",
+                "yqrId": "",
+                "clckId": "",
+                "initialError": null
+            },
+            "error": null
+        }
+    }
+}
