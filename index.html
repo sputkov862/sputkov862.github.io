@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Карта 138-й Кантонской ярмарки</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Шапка с логотипом и ссылками -->
+        <header class="header">
+            <div class="header-logo">
+                <a href="https://esd-express.ru" target="_blank" rel="noopener">
+                    <img src="logo.png" alt="Логотип компании">
+                </a>
+            </div>
+            <nav class="header-nav">
+                <a href="https://esd-express.ru" target="_blank" rel="noopener" class="nav-link">Наш сайт</a>
+                <a href="https://t.me/esd_mk_china" target="_blank" rel="noopener" class="nav-link">Telegram</a>
+                <a href="tel:+79605353355" target="_blank" rel="noopener" class="nav-link" >+7(960)535 33 55</a>
+            </nav>
+        </header>
+        
+        <!-- Основной контент -->
+        <div class="content-wrapper">
+            <!-- Боковое меню -->
+            <div class="sidebar">
+                <!-- Кнопки переключения фаз -->
+                <div class="tabs-sidebar">
+                    <button class="tab-btn" data-phase="1">Фаза 1</button>
+                    <button class="tab-btn" data-phase="2">Фаза 2</button>
+                    <button class="tab-btn" data-phase="3">Фаза 3</button>
+                </div>
+                
+                <ul class="category-list" id="categoryList">
+                    <!-- Категории будут загружены динамически через JavaScript -->
+                </ul>
+            </div>
+            
+            <!-- Карта -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

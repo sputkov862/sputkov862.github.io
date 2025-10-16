@@ -1,0 +1,900 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0a0e27;
+    color: #e0e0e0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1a1f3a;
+}
+
+/* Шапка с логотипом и ссылками */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0a0e1f;
+    border-bottom: 2px solid #2a3f5f;
+    padding: 12px 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+.header-nav {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #8b95a8;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    color: #fff;
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+}
+
+/* Основной контент */
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Кнопки фаз в сайдбаре */
+.tabs-sidebar {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 15px;
+    border-bottom: 2px solid #2a3f5f;
+    background: #0a0e1f;
+}
+
+.tabs-sidebar .tab-btn {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #2a3f5f;
+    background: #1a1f3a;
+    color: #8b95a8;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-weight: 500;
+}
+
+.tabs-sidebar .tab-btn:hover {
+    background: #252d47;
+    color: #c0c8d8;
+    border-color: #4a5578;
+    transform: translateY(-2px);
+}
+
+.tabs-sidebar .tab-btn.active {
+    background: #6366f1;
+    color: white;
+    font-weight: bold;
+    border-color: #6366f1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.tabs-sidebar .tab-btn:disabled {
+    background: #13172b;
+    color: #3a4258;
+    border-color: #1a2238;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.tabs-sidebar .tab-btn:disabled:hover {
+    background: #13172b;
+    color: #3a4258;
+    border-color: #1a2238;
+    transform: none;
+}
+
+/* Основной контент */
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Боковое меню */
+.sidebar {
+    width: 280px;
+    background: #0f1729;
+    border-right: 2px solid #2a3f5f;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+/* Кастомный скроллбар для сайдбара */
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #0a0e1f;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+    border-radius: 10px;
+    border: 2px solid #0a0e1f;
+    transition: all 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #818cf8 0%, #6366f1 100%);
+    border: 2px solid #1a1f3a;
+}
+
+.sidebar::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* Firefox scrollbar */
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #0a0e1f;
+}
+
+.sidebar-title {
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #1a1f3a;
+    border-bottom: 2px solid #2a3f5f;
+    color: #e0e0e0;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid #1a2238;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    position: relative;
+    color: #8b95a8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-name {
+    flex: 1;
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.category-zone {
+    font-size: 12px;
+    font-weight: bold;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.15);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.category-item:hover .category-zone,
+.category-item.active .category-zone {
+    opacity: 1;
+}
+
+.category-item:hover {
+    background: #1a2238;
+    color: #c0c8d8;
+    padding-left: 29px;
+}
+
+.category-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    font-weight: bold;
+    border-left: 12px solid #6366f1;
+    padding-left: 12px;
+}
+
+.category-item.expandable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-item .arrow {
+    font-size: 10px;
+    color: #999;
+}
+
+/* Контейнер карты */
+.map-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+#map {
+    flex: 1;
+    background: #1a1f3a;
+    position: relative;
+}
+
+/* Убираем белую рамку при клике на объекты карты */
+#map *:focus {
+    outline: none !important;
+}
+
+.leaflet-interactive:focus {
+    outline: none !important;
+}
+
+svg path:focus,
+svg rect:focus,
+svg polygon:focus {
+    outline: none !important;
+}
+
+/* Фоновое изображение карты */
+.leaflet-container {
+    background: #1a1f3a !important;
+}
+
+/* Кастомный тултип */
+.custom-tooltip {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.custom-tooltip::before {
+    display: none !important;
+}
+
+.leaflet-tooltip-top::before {
+    display: none !important;
+}
+
+.tooltip-content {
+    background: linear-gradient(135deg, #1a1f3a 0%, #0f1729 100%);
+    border: 2px solid #6366f1;
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tooltip-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #818cf8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tooltip-zone {
+    font-size: 12px;
+    color: #a5b4fc;
+    margin-bottom: 4px;
+    font-style: italic;
+}
+
+.tooltip-category {
+    font-size: 16px;
+    color: #c0c8d8;
+    line-height: 1.4;
+}
+
+/* Легенда внутри карты */
+.legend-panel {
+    position: relative;
+    margin: 20px;
+    background: rgba(15, 23, 41, 0.95);
+    border: 2px solid #2a3f5f;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 900px;
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 12px;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.legend-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(26, 31, 58, 0.5);
+    border-radius: 8px;
+    border: 1px solid #2a3f5f;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.legend-section:hover {
+    background: rgba(26, 31, 58, 0.8);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.legend-section.highlighted {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #818cf8;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.legend-section h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #818cf8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.legend-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateX(5px);
+}
+
+.legend-color {
+    min-width: 50px;
+    width: 50px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    margin-top: 2px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.legend-item span:not(.legend-color) {
+    line-height: 1.5;
+    font-size: 11px;
+    color: #c0c8d8;
+}
+
+/* Цвета категорий */
+.legend-color[data-color="festival"] { background: #87CEEB; }
+.legend-color[data-color="ceramics"] { background: #FFD700; }
+.legend-color[data-color="kitchenware"] { background: #4169E1; }
+.legend-color[data-color="gardening"] { background: #ADFF2F; }
+.legend-color[data-color="weaving"] { background: #32CD32; }
+.legend-color[data-color="international-a"] { background: #FF69B4; }
+.legend-color[data-color="sanitary"] { background: #ADFF2F; }
+.legend-color[data-color="art-ceramics"] { background: #FFD700; }
+.legend-color[data-color="furniture"] { background: #808080; }
+.legend-color[data-color="building"] { background: #00CED1; }
+.legend-color[data-color="glass"] { background: #32CD32; }
+.legend-color[data-color="household"] { background: #4169E1; }
+.legend-color[data-color="home-decor"] { background: #CD5C5C; }
+.legend-color[data-color="clocks"] { background: #000080; }
+.legend-color[data-color="gifts"] { background: #D2691E; }
+.legend-color[data-color="stone"] { background: #FF69B4; }
+.legend-color[data-color="international-d"] { background: #FF69B4; }
+
+/* Стили для маркеров павильонов */
+.building-marker {
+    position: relative;
+    opacity: 1;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+    font-size: 11px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    border-radius: 2px;
+}
+
+.building-marker:hover {
+    opacity: 1;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+    z-index: 1000 !important;
+}
+
+.building-marker.highlighted {
+    opacity: 1;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.08);
+    z-index: 1001 !important;
+}
+
+.building-marker.selected {
+    opacity: 1;
+    border-width: 3px;
+    border-color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    z-index: 1002 !important;
+}
+
+/* Контейнер здания */
+.building-container {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* Части зданий внутри контейнера */
+.building-part {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* Номер здания */
+.building-number {
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* SVG номер здания */
+.building-number-svg {
+    pointer-events: none !important;
+}
+
+
+/* Скрыть стандартные элементы Leaflet */
+.leaflet-control-zoom {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.leaflet-control-attribution {
+    font-size: 10px;
+}
+
+/* Адаптивность */
+
+/* Планшеты (landscape) и небольшие экраны */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+    
+    .legend-panel {
+        max-width: 600px;
+        font-size: 10px;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .header {
+        padding: 10px 20px;
+    }
+    
+    .header-nav {
+        gap: 15px;
+    }
+    
+    .nav-link {
+        font-size: 14px;
+        padding: 8px 14px;
+    }
+    
+    .header-logo img {
+        height: 40px;
+    }
+    
+    .category-item {
+        font-size: 12px;
+        padding: 12px 20px;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
+
+/* Планшеты (portrait) */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+    
+    .main-container {
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height для мобильных */
+    }
+    
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 250px;
+        border-right: none;
+        border-bottom: 2px solid #2a3f5f;
+        overflow-y: auto;
+    }
+    
+    .tabs-sidebar {
+        padding: 10px;
+        gap: 6px;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+    
+    .category-item {
+        font-size: 12px;
+        padding: 10px 15px;
+        border-left-width: 8px !important;
+    }
+    
+    .category-item:hover {
+        padding-left: 23px;
+    }
+    
+    .category-item.active {
+        border-left-width: 8px !important;
+        padding-left: 8px !important;
+    }
+    
+    .legend-panel {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+        max-height: 70vh;
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .header {
+        flex-direction: row;
+        gap: 10px;
+        padding: 10px 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .header-logo {
+        flex-shrink: 0;
+    }
+    
+    .header-nav {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        flex: 1;
+    }
+    
+    .nav-link {
+        font-size: 13px;
+        padding: 7px 10px;
+        flex: 0 0 auto;
+        text-align: center;
+        min-width: auto;
+        white-space: nowrap;
+    }
+    
+    .header-logo img {
+        height: 32px;
+    }
+    
+    .map-container {
+        min-height: 0;
+    }
+    
+    #map {
+        min-height: 300px;
+    }
+    
+    /* Адаптивный тултип для планшетов */
+    .tooltip-content {
+        padding: 10px 14px;
+        min-width: 180px;
+    }
+    
+    .tooltip-header {
+        font-size: 16px;
+    }
+    
+    .tooltip-zone {
+        font-size: 11px;
+    }
+    
+    .tooltip-category {
+        font-size: 14px;
+    }
+}
+
+/* Мобильные телефоны */
+@media (max-width: 480px) {
+    .header {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+    
+    .header-logo img {
+        height: 28px;
+    }
+    
+    .header-nav {
+        gap: 5px;
+    }
+    
+    .nav-link {
+        font-size: 11px;
+        padding: 5px 8px;
+        flex: 0 0 auto;
+    }
+    
+    .sidebar {
+        max-height: 200px;
+    }
+    
+    .tabs-sidebar {
+        padding: 8px;
+        gap: 4px;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        font-size: 10px;
+        padding: 7px 8px;
+    }
+    
+    .category-item {
+        font-size: 11px;
+        padding: 9px 12px;
+        border-left-width: 6px !important;
+    }
+    
+    .category-item:hover {
+        padding-left: 18px;
+    }
+    
+    .category-item.active {
+        border-left-width: 6px !important;
+        padding-left: 6px !important;
+    }
+    
+    .legend-panel {
+        max-width: 95%;
+        max-height: 60vh;
+        padding: 12px;
+        font-size: 10px;
+    }
+    
+    .legend-section h3 {
+        font-size: 12px;
+    }
+    
+    .legend-item span:not(.legend-color) {
+        font-size: 10px;
+    }
+    
+    .legend-color {
+        min-width: 40px;
+        width: 40px;
+        height: 20px;
+    }
+    
+    #map {
+        min-height: 250px;
+    }
+    
+    /* Увеличиваем размер маркеров зданий для удобства на мобильных */
+    .building-marker {
+        font-size: 12px;
+    }
+    
+    /* Компактный тултип для мобильных */
+    .tooltip-content {
+        padding: 8px 12px;
+        min-width: 160px;
+        border-width: 1.5px;
+    }
+    
+    .tooltip-header {
+        font-size: 14px;
+    }
+    
+    .tooltip-zone {
+        font-size: 10px;
+    }
+    
+    .tooltip-category {
+        font-size: 13px;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+    .header {
+        padding: 6px 8px;
+        gap: 6px;
+    }
+    
+    .header-logo img {
+        height: 24px;
+    }
+    
+    .header-nav {
+        gap: 4px;
+    }
+    
+    .nav-link {
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+    
+    .sidebar {
+        max-height: 180px;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        font-size: 9px;
+        padding: 6px 6px;
+    }
+    
+    .category-item {
+        font-size: 10px;
+        padding: 8px 10px;
+    }
+    
+    #map {
+        min-height: 200px;
+    }
+}
+
+/* Landscape режим на мобильных */
+@media (max-height: 600px) and (orientation: landscape) {
+    .sidebar {
+        max-height: 150px;
+    }
+    
+    .header {
+        padding: 8px 15px;
+    }
+    
+    .header-logo img {
+        height: 25px;
+    }
+    
+    .tabs-sidebar {
+        padding: 6px;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    
+    .category-item {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    
+    .legend-panel {
+        max-height: 50vh;
+    }
+}
+
+/* Touch устройства - улучшение интерактивности */
+@media (hover: none) and (pointer: coarse) {
+    .category-item {
+        padding: 12px 15px;
+        min-height: 44px; /* Минимальный размер для удобного нажатия */
+        display: flex;
+        align-items: center;
+    }
+    
+    .tabs-sidebar .tab-btn {
+        min-height: 44px;
+    }
+    
+    .nav-link {
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Убираем hover эффекты на touch устройствах */
+    .category-item:hover {
+        padding-left: 12px;
+        transform: none;
+    }
+    
+    .nav-link:hover {
+        transform: none;
+    }
+    
+    .building-marker:hover {
+        transform: none;
+    }
+}
