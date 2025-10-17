@@ -12,6 +12,50 @@ let isCategoryLocked = false; // Флаг для отслеживания фик
 let clickedRectangle = null; // Ссылка на конкретный кликнутый прямоугольник
 
 // ============================================================================
+// ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+// ============================================================================
+
+function updateMapBackground() {
+    if (!map || !map.imageOverlay) return;
+    
+    const isLightTheme = document.body.classList.contains('light-theme');
+    const newImageUrl = isLightTheme ? 'map-background-day.png' : 'map-background.png';
+    
+    // Удаляем старый overlay
+    map.removeLayer(map.imageOverlay);
+    
+    // Создаем новый overlay с новым изображением
+    const bounds = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
+    const newImageOverlay = L.imageOverlay(newImageUrl, bounds, {
+        opacity: 0.8,
+        interactive: false
+    }).addTo(map);
+    
+    // Сохраняем новую ссылку
+    map.imageOverlay = newImageOverlay;
+    
+    console.log('Фон карты обновлен для', isLightTheme ? 'светлой' : 'темной', 'темы');
+}
+
+function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+        
+        // Обновляем фон карты при переключении темы
+        updateMapBackground();
+    });
+}
+
+// ============================================================================
 // ЗАГРУЗКА КОНФИГУРАЦИИ
 // ============================================================================
 
@@ -56,12 +100,16 @@ function initMap() {
 
     const bounds = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
 
-    // Добавление фонового изображения
-    const imageUrl = 'map-background.png';
+    // Добавление фонового изображения в зависимости от темы
+    const isLightTheme = document.body.classList.contains('light-theme');
+    const imageUrl = isLightTheme ? 'map-background-day.png' : 'map-background.png';
     const imageOverlay = L.imageOverlay(imageUrl, bounds, {
         opacity: 0.8,
         interactive: false
     }).addTo(map);
+    
+    // Сохраняем ссылку на imageOverlay для обновления при смене темы
+    map.imageOverlay = imageOverlay;
 
     // Обработка загрузки изображения
     imageOverlay.on('load', function() {
@@ -234,7 +282,8 @@ function createBuildingMarker(building) {
     textElement.setAttribute('dominant-baseline', 'middle');
     textElement.setAttribute('font-size', '100');
     textElement.setAttribute('font-weight', 'bold');
-    textElement.setAttribute('fill', '#fff');
+    textElement.setAttribute('font-family', 'Onest, Arial, sans-serif');
+    textElement.setAttribute('class', 'building-number-text');
     textElement.textContent = building.number;
     
     svgElement.appendChild(textElement);
@@ -572,6 +621,9 @@ window.addEventListener('orientationchange', () => {
         }
     }, 300);
 });
+
+// Инициализация переключателя темы
+initTheme();
 
 // Предотвращение случайного зума при двойном тапе на iOS
 document.addEventListener('touchstart', function(event) {
