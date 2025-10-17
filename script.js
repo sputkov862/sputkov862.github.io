@@ -72,19 +72,19 @@ function initMap() {
         console.warn('Фоновое изображение не найдено. Добавьте файл map-background.png в папку проекта');
     });
 
-    // Установка начального вида
-    map.fitBounds(bounds);
-    
-    // Устанавливаем разумные ограничения для прокрутки
-    // Даем немного пространства со всех сторон, особенно снизу для мобильных
-    const bottomPadding = isMobile ? 300 : 150; // Больше места снизу для мобильных
-    const topPadding = 100;
-    const sidePadding = 150;
+    // Устанавливаем большие ограничения для прокрутки
+    // Даем много пространства со всех сторон для удобства навигации
+    const bottomPadding = isMobile ? 500 : 300; // Больше места снизу
+    const topPadding = isMobile ? 800 : 200; // Больше места сверху на мобильных
+    const sidePadding = 300;
     
     map.setMaxBounds([
         [-topPadding, -sidePadding],
         [MAP_HEIGHT + bottomPadding, MAP_WIDTH + sidePadding]
     ]);
+
+    // Установка начального вида
+    map.fitBounds(bounds);
     
     // Обработчик клика на пустое место карты для снятия выделения
     map.on('click', function(e) {
