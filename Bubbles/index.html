@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пузыри — стиль Windows 7</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-start: #0b1f35;
+            --bg-end: #123d63;
+            --panel: rgba(9, 22, 36, 0.7);
+            --panel-border: rgba(255, 255, 255, 0.12);
+            --text: #eef7ff;
+            --accent: #7ad7ff;
+            --accent-2: #9fe2c9;
+        }
+
+        body {
+            font-family: 'Manrope', 'Segoe UI', Tahoma, sans-serif;
+            background: radial-gradient(circle at 30% 30%, #1a3552, #0b1f35 50%),
+                        radial-gradient(circle at 70% 70%, #11304c, #0b1f35 55%),
+                        linear-gradient(180deg, var(--bg-start), var(--bg-end));
+            overflow: hidden;
+            color: var(--text);
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .hud {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .hud__metric {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .hud__metric small { opacity: 0.7; font-weight: 500; }
+
+        .hud__controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--panel-border);
+        }
+
+        button {
+            border: none;
+            background: linear-gradient(135deg, #7ad7ff, #9fe2c9);
+            color: #06223a;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        button:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28); }
+        button:active { transform: translateY(0); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
+
+        input[type="number"] {
+            width: 88px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .toggle {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            box-shadow: none;
+        }
+
+        @media (max-width: 860px) {
+            .hud { top: auto; bottom: 14px; flex-direction: column; align-items: stretch; gap: 10px; width: calc(100% - 28px); }
+            .hud__controls { width: 100%; }
+            .pill { flex: 1; justify-content: space-between; }
+            button { width: 100%; }
+            input[type="number"] { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hud" id="hud">
+        <div class="hud__metric">
+            <span id="gbValue">5.0</span>
+            <small>ГБ</small>
+        </div>
+        <div class="hud__controls">
+            <div class="pill">
+                <button id="minusBtn" aria-label="Уменьшить">−</button>
+                <input type="number" id="deltaInput" value="50" step="0.1" min="0" aria-label="Шаг изменения">
+                <button id="plusBtn" aria-label="Увеличить">+</button>
+            </div>
+            <div class="pill">
+                <label for="speedSlider">Скорость</label>
+                <input type="range" id="speedSlider" min="50" max="200" value="110">
+            </div>
+            <div class="pill">
+                <label for="opacitySlider">Прозрачность</label>
+                <input type="range" id="opacitySlider" min="40" max="100" value="90">
+            </div>
+        </div>
+        <button class="toggle" id="hudToggle">Скрыть</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+    <div class="log" id="log"></div>
+
+    <script>
+        (() => {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // мягкий потолок DPI для слабых машин
+
+            let width = 0;
+            let height = 0;
+            let backgroundFill = null;
+
+            const state = {
+                currentGB: 5,
+                targetGB: 5,
+                globalOpacity: 0.9,
+                speedFactor: 1.1,
+            };
+
+            // Близкие к оригинальной заставке Win7 яркие цвета
+            const palette = ['#ff2f56', '#ff7a00', '#ffd200', '#7be000', '#25d6ff', '#2b7bff', '#8a2be2', '#ff5be0'];
+            const bubbles = [];
+            const MAX_BUBBLES = 60;
+            const baseTexture = new Image();
+            let textureReady = false;
+
+            let bubbleIdSeq = 0;
+            let desiredSizes = [];
+
+            const BASE_RADIUS = 26; // единичный радиус для sizeGB = 1
+
+            const AREA_LIMIT = 0.55; // доля экрана для размещения
+            const PAD_AREA_COEFF = 8; // коэффициент "зазоров" на пузырь
+            let cappedGB = 0; // фактически размещённый объём после ограничений
+
+            const MAX_VEL = 2.2; // ограничение скоростей после коллизий
+            const COLLISION_ITERS = 2; // дополнительные итерации разрешения коллизий за кадр
+
+            let lastConsoleLog = 0;
+
+            const grid = new Map();
+            const cellSize = 70; // ~2*средний радиус
+
+            let overlapsCount = 0;
+
+            const gbValueEl = document.getElementById('gbValue');
+            const deltaInput = document.getElementById('deltaInput');
+            const minusBtn = document.getElementById('minusBtn');
+            const plusBtn = document.getElementById('plusBtn');
+            const speedSlider = document.getElementById('speedSlider');
+            const opacitySlider = document.getElementById('opacitySlider');
+            const hud = document.getElementById('hud');
+            const hudToggle = document.getElementById('hudToggle');
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = Math.floor(width * dpr);
+                canvas.height = Math.floor(height * dpr);
+                canvas.style.width = width + 'px';
+                canvas.style.height = height + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                buildBackground();
+            }
+
+            function buildBackground() {
+                const grad = ctx.createLinearGradient(0, 0, 0, height);
+                grad.addColorStop(0, 'rgba(12, 33, 58, 0.9)');
+                grad.addColorStop(1, 'rgba(8, 18, 32, 0.92)');
+                backgroundFill = grad;
+            }
+
+            function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+            function tintSprite(color) {
+                if (!textureReady) return null;
+                const c = document.createElement('canvas');
+                c.width = baseTexture.width;
+                c.height = baseTexture.height;
+                const t = c.getContext('2d');
+                t.drawImage(baseTexture, 0, 0);
+                t.globalCompositeOperation = 'source-atop';
+                t.fillStyle = color;
+                t.globalAlpha = 0.95;
+                t.fillRect(0, 0, c.width, c.height);
+                t.globalCompositeOperation = 'lighter';
+                t.globalAlpha = 0.35;
+                t.drawImage(baseTexture, 0, 0);
+                return c;
+            }
+
+            function hexToRgb(hex) {
+                const h = hex.replace('#', '');
+                return {
+                    r: parseInt(h.substring(0, 2), 16),
+                    g: parseInt(h.substring(2, 4), 16),
+                    b: parseInt(h.substring(4, 6), 16),
+                };
+            }
+
+            function rgbToHex(r, g, b) {
+                const toHex = v => v.toString(16).padStart(2, '0');
+                return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+            }
+
+            function lerpColor(a, b, t) {
+                const ca = hexToRgb(a);
+                const cb = hexToRgb(b);
+                const r = Math.round(ca.r + (cb.r - ca.r) * t);
+                const g = Math.round(ca.g + (cb.g - ca.g) * t);
+                const bl = Math.round(ca.b + (cb.b - ca.b) * t);
+                return rgbToHex(r, g, bl);
+            }
+
+            function pickPaletteColor(except) {
+                let c = except;
+                while (c === except) {
+                    c = palette[Math.floor(Math.random() * palette.length)];
+                }
+                return c;
+            }
+
+            function makeBubble(isFractional = false, spawnFromCenter = false, sizeGB = 1) {
+                const depth = 1; // фиксированная глубина для единообразного размера
+                const baseRadius = BASE_RADIUS;
+                const radius = baseRadius * depth * Math.sqrt(sizeGB);
+                const angle = Math.random() * Math.PI * 2;
+                const speed = (0.15 + Math.random() * 0.22) * depth;
+                const wobble = 0.2 + Math.random() * 0.35;
+                const hue = palette[Math.floor(Math.random() * palette.length)];
+
+                const spawnX = spawnFromCenter
+                    ? width * 0.5 + (Math.random() - 0.5) * 60
+                    : Math.random() * width;
+                const spawnY = spawnFromCenter
+                    ? height + radius * 1.2
+                    : Math.random() * height;
+                const spawnAngle = spawnFromCenter
+                    ? (-Math.PI / 2) + (Math.random() - 0.5) * 0.6 // вверх, но с разбросом
+                    : angle;
+                const spawnSpeed = spawnFromCenter
+                    ? (0.55 + Math.random() * 0.55) // рандомный напор вверх
+                    : speed;
+
+                const spawnVx = Math.cos(spawnAngle) * spawnSpeed;
+                const spawnVy = Math.sin(spawnAngle) * spawnSpeed;
+
+                return {
+                    id: ++bubbleIdSeq,
+                    x: spawnX,
+                    y: spawnY,
+                    vx: spawnVx,
+                    vy: spawnVy,
+                    radius,
+                    baseRadius,
+                    depth,
+                    mass: radius * radius * 0.35,
+                    alpha: 0.35 + depth * 0.35,
+                    wobblePhase: Math.random() * Math.PI * 2,
+                    wobbleSpeed: 0.6 + Math.random() * 0.6,
+                    wobbleAmount: wobble,
+                    isFractional,
+                    color: hue,
+                    colorFrom: hue,
+                    colorTo: pickPaletteColor(hue),
+                    colorT: Math.random(),
+                    colorTick: 0,
+                    solid: false,
+                    ghostUntil: performance.now() + 3000,
+                    overlapping: false,
+                    sizeGB: sizeGB,
+                    targetSizeGB: sizeGB,
+                    sprite: null,
+                };
+            }
+
+            function rebuildSprites() {
+                bubbles.forEach(b => { b.sprite = tintSprite(b.color); });
+            }
+
+            function planSizes(totalGB) {
+                const sizes = [];
+                const whole = Math.floor(Math.max(totalGB, 0));
+                const frac = Math.max(0, totalGB - whole);
+
+                for (let i = 0; i < whole; i++) sizes.push(1);
+                if (frac > 0) sizes.push(frac);
+
+                sizes.sort((a, b) => a - b);
+
+                const screenArea = width * height;
+
+                const sumSizes = () => sizes.reduce((acc, s) => acc + s, 0);
+                const occupiedArea = () => {
+                    const areaSum = Math.PI * BASE_RADIUS * BASE_RADIUS * sumSizes();
+                    const padding = PAD_AREA_COEFF * BASE_RADIUS * BASE_RADIUS * sizes.length;
+                    return areaSum + padding;
+                };
+
+                // Сливаем только чтобы уложиться в лимит количества (до 60)
+                while (sizes.length > MAX_BUBBLES && sizes.length > 1) {
+                    const a = sizes.shift();
+                    const b = sizes.shift() ?? 0;
+                    sizes.push(a + b);
+                    sizes.sort((x, y) => x - y);
+                }
+
+                // Если после лимита по количеству площадь всё ещё велика — просто игнорируем лишние ГБ, убирая самые маленькие шары
+                while (sizes.length > 0 && occupiedArea() > screenArea * AREA_LIMIT) {
+                    sizes.shift(); // удалить минимальный шар и тем самым уменьшить суммарный объём
+                }
+
+                desiredSizes = sizes.sort((a, b) => b - a);
+                cappedGB = desiredSizes.reduce((acc, s) => acc + s, 0);
+            }
+
+            function reconcileBubbles() {
+                const desired = [...desiredSizes];
+                const existing = [...bubbles].sort((a, b) => b.targetSizeGB - a.targetSizeGB);
+                const keep = Math.min(desired.length, existing.length);
+
+                for (let i = 0; i < keep; i++) {
+                    const b = existing[i];
+                    b.targetSizeGB = desired[i];
+                }
+
+                if (desired.length > existing.length) {
+                    for (let i = keep; i < desired.length; i++) {
+                        const b = makeBubble(false, true, desired[i]);
+                        b.sprite = tintSprite(b.color);
+                        bubbles.push(b);
+                    }
+                }
+
+                if (existing.length > desired.length) {
+                    for (let i = keep; i < existing.length; i++) {
+                        const b = existing[i];
+                        b.targetSizeGB = 0; // плавно схлопываем
+                    }
+                }
+            }
+
+            function gridKey(cx, cy) { return `${cx}|${cy}`; }
+
+            function getCellRange(b) {
+                const minCx = Math.floor((b.x - b.radius) / cellSize);
+                const maxCx = Math.floor((b.x + b.radius) / cellSize);
+                const minCy = Math.floor((b.y - b.radius) / cellSize);
+                const maxCy = Math.floor((b.y + b.radius) / cellSize);
+                return { minCx, maxCx, minCy, maxCy };
+            }
+
+            function rebuildGrid() {
+                grid.clear();
+                for (let i = 0; i < bubbles.length; i++) {
+                    const b = bubbles[i];
+                    const { minCx, maxCx, minCy, maxCy } = getCellRange(b);
+                    for (let cx = minCx; cx <= maxCx; cx++) {
+                        for (let cy = minCy; cy <= maxCy; cy++) {
+                            const key = gridKey(cx, cy);
+                            if (!grid.has(key)) grid.set(key, []);
+                            grid.get(key).push(b);
+                        }
+                    }
+                }
+            }
+
+            function updateHud() {
+                gbValueEl.textContent = state.currentGB.toFixed(1);
+            }
+
+            function stepGB(delta) {
+                const amount = parseFloat(deltaInput.value) || 0;
+                const step = amount > 0 ? amount : 0.1;
+                state.targetGB = clamp(state.targetGB + delta * step, 0, 999);
+                planSizes(state.targetGB);
+                reconcileBubbles();
+            }
+
+            function handleFrame(now) {
+                handleFrame.last = handleFrame.last || now;
+                const dt = clamp((now - handleFrame.last) * 0.06, 0, 1.5); // ограничиваем шаг, чтобы не пролетать сквозь коллизии
+                handleFrame.last = now;
+
+                ctx.fillStyle = backgroundFill;
+                ctx.fillRect(0, 0, width, height);
+
+                if (Math.abs(state.currentGB - state.targetGB) > 0.001) {
+                    state.currentGB += (state.targetGB - state.currentGB) * 0.08;
+                    updateHud();
+                }
+
+                overlapsCount = 0;
+
+                const steps = Math.max(1, Math.ceil(dt / 0.4));
+                const subDt = dt / steps;
+
+                for (let step = 0; step < steps; step++) {
+                    for (let i = 0; i < bubbles.length; i++) {
+                        const b = bubbles[i];
+                        b.overlapping = false;
+
+                        // Цветовая интерполяция в духе Win7 заставки
+                        b.colorT += subDt * 0.01;
+                        if (b.colorT >= 1) {
+                            b.colorFrom = b.colorTo;
+                            b.colorTo = pickPaletteColor(b.colorFrom);
+                            b.colorT = 0;
+                        }
+                        b.color = lerpColor(b.colorFrom, b.colorTo, b.colorT);
+                        if (textureReady && (++b.colorTick & 7) === 0) {
+                            b.sprite = tintSprite(b.color);
+                        }
+
+                        // Плавное подгонка размера к целевому
+                        const sizeLerp = 0.08 * subDt;
+                        b.sizeGB += (b.targetSizeGB - b.sizeGB) * sizeLerp;
+                        if (b.sizeGB < 0.001 && b.targetSizeGB === 0) {
+                            b.toRemove = true;
+                        } else {
+                            b.radius = BASE_RADIUS * Math.sqrt(Math.max(b.sizeGB, 0.001));
+                            b.mass = b.radius * b.radius * 0.35;
+                        }
+
+                        b.wobblePhase += b.wobbleSpeed * subDt * 0.016;
+                        const wobbleX = Math.cos(b.wobblePhase) * b.wobbleAmount;
+                        const wobbleY = Math.sin(b.wobblePhase * 0.8) * b.wobbleAmount;
+
+                        b.x += (b.vx + wobbleX) * state.speedFactor * subDt;
+                        b.y += (b.vy + wobbleY) * state.speedFactor * subDt;
+
+                        if (b.x - b.radius < 0) { b.x = b.radius; b.vx = Math.abs(b.vx); }
+                        if (b.x + b.radius > width) { b.x = width - b.radius; b.vx = -Math.abs(b.vx); }
+                        if (b.y - b.radius < 0) { b.y = b.radius; b.vy = Math.abs(b.vy); }
+                        if (b.y + b.radius > height) { b.y = height - b.radius; b.vy = -Math.abs(b.vy); }
+                    }
+
+                    rebuildGrid();
+                    // Помечаем призраков, которые ещё пересекаются с кем-либо
+                    markGhostOverlaps();
+
+                    for (let iter = 0; iter < COLLISION_ITERS; iter++) {
+                        resolveCollisionsSpatial(now);
+                        resolvePositionalOnly();
+                    }
+                }
+
+                // Переводим "призраков" в твёрдое состояние, когда они не пересекаются ни с кем
+                for (let i = 0; i < bubbles.length; i++) {
+                    const b = bubbles[i];
+                    if (!b.solid && now > b.ghostUntil && !b.overlapping) {
+                        b.solid = true;
+                    }
+                }
+
+                bubbles.sort((a, b) => a.depth - b.depth);
+
+                // Удаляем схлопнувшиеся
+                for (let i = bubbles.length - 1; i >= 0; i--) {
+                    if (bubbles[i].toRemove) {
+                        bubbles.splice(i, 1);
+                    }
+                }
+
+                for (let i = 0; i < bubbles.length; i++) {
+                    drawBubble(bubbles[i]);
+                }
+
+                updateLog();
+
+                requestAnimationFrame(handleFrame);
+            }
+
+            function resolveCollisionsSpatial(now) {
+                const checked = new Set();
+                const neighborOffsets = [
+                    [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]
+                ];
+
+                for (const [key, list] of grid.entries()) {
+                    const [cx, cy] = key.split('|').map(Number);
+                    for (const [dx, dy] of neighborOffsets) {
+                        const nKey = gridKey(cx + dx, cy + dy);
+                        const otherList = grid.get(nKey);
+                        if (!otherList) continue;
+
+                        for (let i = 0; i < list.length; i++) {
+                            const a = list[i];
+                            for (let j = 0; j < otherList.length; j++) {
+                                const b = otherList[j];
+                                if (a === b) continue;
+                                if (!a.solid || !b.solid) continue; // призрачные не участвуют
+                                const pairId = a.id < b.id ? `${a.id}|${b.id}` : `${b.id}|${a.id}`;
+                                if (checked.has(pairId)) continue;
+
+                                const dx2 = b.x - a.x;
+                                const dy2 = b.y - a.y;
+                                const minDist = a.radius + b.radius;
+                                const distSq = dx2 * dx2 + dy2 * dy2;
+                                if (distSq >= minDist * minDist || distSq === 0) continue;
+
+                                const dist = Math.sqrt(distSq) || 0.0001;
+                                const nx = dx2 / dist;
+                                const ny = dy2 / dist;
+                                const overlapRaw = (minDist - dist) * 0.5;
+                                const overlap = Math.min(overlapRaw, minDist * 0.25); // мягкое разведение без резких скачков
+
+                                a.x -= nx * overlap;
+                                a.y -= ny * overlap;
+                                b.x += nx * overlap;
+                                b.y += ny * overlap;
+
+                                const ma = a.mass;
+                                const mb = b.mass;
+                                const va = a.vx * nx + a.vy * ny;
+                                const vb = b.vx * nx + b.vy * ny;
+                                const restitution = 0.9; // чуть гасим энергию
+                                const p = restitution * (2 * (va - vb)) / (ma + mb);
+
+                                a.vx -= p * mb * nx;
+                                a.vy -= p * mb * ny;
+                                b.vx += p * ma * nx;
+                                // ограничиваем скорости после импульса
+
+                                // ограничиваем скорости после импульса
+                                a.vx = clamp(a.vx, -MAX_VEL, MAX_VEL);
+                                a.vy = clamp(a.vy, -MAX_VEL, MAX_VEL);
+                                b.vx = clamp(b.vx, -MAX_VEL, MAX_VEL);
+                                b.vy = clamp(b.vy, -MAX_VEL, MAX_VEL);
+
+                                a.overlapping = true;
+                                b.overlapping = true;
+                                overlapsCount++;
+
+                                checked.add(pairId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Дополнительный проход только с разделением (без импульса) для устранения остаточных пересечений
+            function resolvePositionalOnly() {
+                const neighborOffsets = [
+                    [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]
+                ];
+                for (const [key, list] of grid.entries()) {
+                    const [cx, cy] = key.split('|').map(Number);
+                    for (const [dx, dy] of neighborOffsets) {
+                        const nKey = gridKey(cx + dx, cy + dy);
+                        const otherList = grid.get(nKey);
+                        if (!otherList) continue;
+                        for (let i = 0; i < list.length; i++) {
+                            const a = list[i];
+                            for (let j = 0; j < otherList.length; j++) {
+                                const b = otherList[j];
+                                if (a === b) continue;
+                                if (!a.solid || !b.solid) continue;
+                                const dx2 = b.x - a.x;
+                                const dy2 = b.y - a.y;
+                                const minDist = a.radius + b.radius;
+                                const distSq = dx2 * dx2 + dy2 * dy2;
+                                if (distSq >= minDist * minDist || distSq === 0) continue;
+                                const dist = Math.sqrt(distSq) || 0.0001;
+                                const nx = dx2 / dist;
+                                const ny = dy2 / dist;
+                                const overlapRaw = (minDist - dist) * 0.5;
+                                const overlap = Math.min(overlapRaw, minDist * 0.2);
+                                a.x -= nx * overlap;
+                                a.y -= ny * overlap;
+                                b.x += nx * overlap;
+                                b.y += ny * overlap;
+                            }
+                        }
+                    }
+                }
+            }
+
+            function markGhostOverlaps() {
+                // Проверяем призрачные шары по всему их охвату, иначе большие радиусы пропускают пересечения
+                for (let i = 0; i < bubbles.length; i++) {
+                    const g = bubbles[i];
+                    if (g.solid) continue;
+                    const { minCx, maxCx, minCy, maxCy } = getCellRange(g);
+                    let intersect = false;
+                    for (let cx = minCx - 1; cx <= maxCx + 1 && !intersect; cx++) {
+                        for (let cy = minCy - 1; cy <= maxCy + 1 && !intersect; cy++) {
+                            const nKey = gridKey(cx, cy);
+                            const list = grid.get(nKey);
+                            if (!list) continue;
+                            for (let k = 0; k < list.length; k++) {
+                                const other = list[k];
+                                if (other === g) continue;
+                                const dx2 = other.x - g.x;
+                                const dy2 = other.y - g.y;
+                                const minDist = other.radius + g.radius;
+                                if (dx2 * dx2 + dy2 * dy2 < minDist * minDist) {
+                                    intersect = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (intersect) {
+                        g.overlapping = true;
+                    }
+                }
+            }
+
+            function updateLog() {
+                const log = document.getElementById('log');
+                const ghosts = bubbles.filter(b => !b.solid).length;
+                const sizes = {};
+                for (let i = 0; i < bubbles.length; i++) {
+                    const s = Math.round(bubbles[i].sizeGB * 1000) / 1000;
+                    sizes[s] = (sizes[s] || 0) + 1;
+                }
+                const sizeEntries = Object.entries(sizes).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])).map(([k, v]) => `${k}:${v}`).join(', ');
+                log.textContent = `curGB:${state.currentGB.toFixed(2)} tgtGB:${state.targetGB.toFixed(2)} cappedGB:${cappedGB.toFixed(2)} | desired:${desiredSizes.length} | bubbles:${bubbles.length} | ghosts:${ghosts} | overlaps:${overlapsCount} | sizes[${sizeEntries}]`;
+
+                // консольное логирование раз в 1.5 сек для отладки зависаний
+                const now = performance.now();
+                if (now - lastConsoleLog > 1500) {
+                    lastConsoleLog = now;
+                    console.log('[bubbles]', {
+                        currentGB: state.currentGB.toFixed(2),
+                        targetGB: state.targetGB.toFixed(2),
+                        desiredCount: desiredSizes.length,
+                        desiredSizes: [...desiredSizes],
+                        cappedGB,
+                        bubbles: bubbles.length,
+                        ghosts,
+                        overlaps: overlapsCount,
+                        sizesHistogram: sizes,
+                    });
+                }
+            }
+
+            function drawBubble(b) {
+                const size = b.radius * 2;
+                ctx.save();
+                ctx.globalAlpha = b.alpha * state.globalOpacity;
+
+                if (textureReady && b.sprite) {
+                    ctx.drawImage(b.sprite, b.x - size * 0.5, b.y - size * 0.5, size, size);
+                } else {
+                    const g = ctx.createRadialGradient(
+                        b.x - b.radius * 0.25,
+                        b.y - b.radius * 0.25,
+                        b.radius * 0.15,
+                        b.x,
+                        b.y,
+                        b.radius
+                    );
+                    g.addColorStop(0, 'rgba(255,255,255,0.9)');
+                    g.addColorStop(0.3, `${b.color}aa`);
+                    g.addColorStop(0.55, `${b.color}55`);
+                    g.addColorStop(1, 'rgba(255,255,255,0.04)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            function toggleHud() {
+                hud.classList.toggle('hidden');
+                hud.style.opacity = hud.classList.contains('hidden') ? 0.2 : 1;
+                hudToggle.textContent = hud.classList.contains('hidden') ? 'Показать' : 'Скрыть';
+            }
+
+            minusBtn.addEventListener('click', () => stepGB(-1));
+            plusBtn.addEventListener('click', () => stepGB(1));
+            speedSlider.addEventListener('input', e => { state.speedFactor = parseInt(e.target.value, 10) / 100; });
+            opacitySlider.addEventListener('input', e => { state.globalOpacity = parseInt(e.target.value, 10) / 100; });
+            hudToggle.addEventListener('click', toggleHud);
+            window.addEventListener('resize', () => { resize(); planSizes(state.targetGB); });
+            window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') toggleHud(); });
+
+            baseTexture.onload = () => { textureReady = true; rebuildSprites(); };
+            baseTexture.src = 'bubble.png';
+
+            resize();
+            planSizes(state.targetGB);
+            reconcileBubbles();
+            updateHud();
+            requestAnimationFrame(handleFrame);
+        })();
+    </script>
+</body>
+</html>
