@@ -137,6 +137,18 @@
             <span id="fpsValue">0</span>
             <small>FPS</small>
         </div>
+        <div class="hud__metric">
+            <span id="fpsMin">0</span>
+            <small>min</small>
+        </div>
+        <div class="hud__metric">
+            <span id="fpsAvg">0</span>
+            <small>avg</small>
+        </div>
+        <div class="hud__metric">
+            <span id="fpsMax">0</span>
+            <small>max</small>
+        </div>
         <div class="hud__controls">
             <div class="pill">
                 <button id="minusBtn" aria-label="Уменьшить">−</button>
@@ -150,6 +162,9 @@
             <div class="pill">
                 <label for="opacitySlider">Прозрачность</label>
                 <input type="range" id="opacitySlider" min="40" max="100" value="90">
+            </div>
+            <div class="pill">
+                <button class="toggle" id="collisionsToggle">Коллизии: Вкл</button>
             </div>
         </div>
         <button class="toggle" id="hudToggle">Скрыть</button>
@@ -173,6 +188,7 @@
                 targetGB: 5,
                 globalOpacity: 0.9,
                 speedFactor: 1.1,
+                collisionsEnabled: true,
             };
 
             // Близкие к оригинальной заставке Win7 яркие цвета
@@ -210,6 +226,9 @@
 
             const gbValueEl = document.getElementById('gbValue');
             const fpsValueEl = document.getElementById('fpsValue');
+            const fpsMinEl = document.getElementById('fpsMin');
+            const fpsAvgEl = document.getElementById('fpsAvg');
+            const fpsMaxEl = document.getElementById('fpsMax');
             const deltaInput = document.getElementById('deltaInput');
             const minusBtn = document.getElementById('minusBtn');
             const plusBtn = document.getElementById('plusBtn');
@@ -217,11 +236,16 @@
             const opacitySlider = document.getElementById('opacitySlider');
             const hud = document.getElementById('hud');
             const hudToggle = document.getElementById('hudToggle');
+            const collisionsToggle = document.getElementById('collisionsToggle');
             const logEl = document.getElementById('log');
 
             let fpsFrames = 0;
             let fpsAccumMs = 0;
             let lastFpsUpdate = 0;
+            let fpsMin = Infinity;
+            let fpsMax = 0;
+            let fpsTotalFrames = 0;
+            let fpsTotalMs = 0;
             let lastLogUpdate = 0;
             let ghostsCount = 0;
             let pendingSpawns = [];
@@ -501,6 +525,16 @@
                 if (now - lastFpsUpdate > 400 && fpsAccumMs > 0) {
                     const fps = fpsFrames / (fpsAccumMs / 1000);
                     fpsValueEl.textContent = Math.round(fps).toString();
+
+                    fpsTotalFrames += fpsFrames;
+                    fpsTotalMs += fpsAccumMs;
+                    fpsMin = Math.min(fpsMin, fps);
+                    fpsMax = Math.max(fpsMax, fps);
+                    const fpsAvg = fpsTotalMs > 0 ? (fpsTotalFrames / (fpsTotalMs / 1000)) : fps;
+
+                    fpsMinEl.textContent = Math.round(fpsMin === Infinity ? fps : fpsMin).toString();
+                    fpsMaxEl.textContent = Math.round(fpsMax).toString();
+                    fpsAvgEl.textContent = fpsAvg.toFixed(1);
                     fpsFrames = 0;
                     fpsAccumMs = 0;
                     lastFpsUpdate = now;
@@ -524,6 +558,9 @@
                     for (let i = 0; i < bubbles.length; i++) {
                         const b = bubbles[i];
                         b.overlapping = false;
+                        if (!state.collisionsEnabled && !b.solid) {
+                            b.solid = true; // без коллизий призрачность не нужна
+                        }
 
                         // Цветовая интерполяция в духе Win7 заставки
                         b.colorT += subDt * 0.01;
@@ -560,34 +597,38 @@
                         if (b.y + b.radius > height) { b.y = height - b.radius; b.vy = -Math.abs(b.vy); }
                     }
 
-                    rebuildGrid();
+                    if (state.collisionsEnabled) {
+                        rebuildGrid();
 
-                    let ghostsPresent = false;
-                    for (let i = 0; i < bubbles.length; i++) {
-                        if (!bubbles[i].solid) {
-                            ghostsCount++;
-                            ghostsPresent = true;
+                        let ghostsPresent = false;
+                        for (let i = 0; i < bubbles.length; i++) {
+                            if (!bubbles[i].solid) {
+                                ghostsCount++;
+                                ghostsPresent = true;
+                            }
                         }
-                    }
-                    if (ghostsPresent) {
-                        // Помечаем призраков, которые ещё пересекаются с кем-либо
-                        markGhostOverlaps();
-                    }
+                        if (ghostsPresent) {
+                            // Помечаем призраков, которые ещё пересекаются с кем-либо
+                            markGhostOverlaps();
+                        }
 
-                    for (let iter = 0; iter < COLLISION_ITERS; iter++) {
-                        resolveCollisionsSpatial(now);
-                        resolvePositionalOnly();
+                        for (let iter = 0; iter < COLLISION_ITERS; iter++) {
+                            resolveCollisionsSpatial(now);
+                            resolvePositionalOnly();
+                        }
                     }
                 }
 
                 spawnQueued(now);
 
                 // Переводим "призраков" в твёрдое состояние, когда они не пересекаются ни с кем
-                for (let i = 0; i < bubbles.length; i++) {
-                    const b = bubbles[i];
-                    if (!b.solid && now > b.ghostUntil && !b.overlapping) {
-                        b.solid = true;
-                        ghostsCount = Math.max(0, ghostsCount - 1);
+                if (state.collisionsEnabled) {
+                    for (let i = 0; i < bubbles.length; i++) {
+                        const b = bubbles[i];
+                        if (!b.solid && now > b.ghostUntil && !b.overlapping) {
+                            b.solid = true;
+                            ghostsCount = Math.max(0, ghostsCount - 1);
+                        }
                     }
                 }
 
@@ -803,11 +844,24 @@
                 hudToggle.textContent = hud.classList.contains('hidden') ? 'Показать' : 'Скрыть';
             }
 
+            function toggleCollisions() {
+                state.collisionsEnabled = !state.collisionsEnabled;
+                collisionsToggle.textContent = state.collisionsEnabled ? 'Коллизии: Вкл' : 'Коллизии: Выкл';
+                if (!state.collisionsEnabled) {
+                    // При отключении сразу делаем все шары твёрдыми, чтобы не тратить время на призрачные проверки
+                    for (let i = 0; i < bubbles.length; i++) {
+                        bubbles[i].solid = true;
+                    }
+                    ghostsCount = 0;
+                }
+            }
+
             minusBtn.addEventListener('click', () => stepGB(-1));
             plusBtn.addEventListener('click', () => stepGB(1));
             speedSlider.addEventListener('input', e => { state.speedFactor = parseInt(e.target.value, 10) / 100; });
             opacitySlider.addEventListener('input', e => { state.globalOpacity = parseInt(e.target.value, 10) / 100; });
             hudToggle.addEventListener('click', toggleHud);
+            collisionsToggle.addEventListener('click', toggleCollisions);
             window.addEventListener('resize', () => { resize(); planSizes(state.targetGB); });
             window.addEventListener('keydown', e => { if (e.key === 'h' || e.key === 'H') toggleHud(); });
 
