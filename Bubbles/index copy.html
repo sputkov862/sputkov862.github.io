@@ -184,8 +184,6 @@
             const neighborOffsets = [
                 [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]
             ];
-            const SPAWN_INTERVAL_MS = 90;
-            const SPAWN_BATCH = 1;
 
             let bubbleIdSeq = 0;
             let desiredSizes = [];
@@ -202,9 +200,7 @@
             let lastConsoleLog = 0;
 
             const grid = new Map();
-            const arrayPool = [];
             const cellSize = 70; // ~2*средний радиус
-            const checkedPairs = new Set();
 
             let overlapsCount = 0;
 
@@ -222,10 +218,6 @@
             let fpsFrames = 0;
             let fpsAccumMs = 0;
             let lastFpsUpdate = 0;
-            let lastLogUpdate = 0;
-            let ghostsCount = 0;
-            let pendingSpawns = [];
-            let spawnCooldown = 0;
 
             function resize() {
                 width = window.innerWidth;
@@ -243,12 +235,6 @@
                 grad.addColorStop(0, 'rgba(12, 33, 58, 0.9)');
                 grad.addColorStop(1, 'rgba(8, 18, 32, 0.92)');
                 backgroundFill = grad;
-            }
-
-            function acquireArray() { return arrayPool.pop() || []; }
-            function releaseArray(arr) {
-                arr.length = 0;
-                arrayPool.push(arr);
             }
 
             function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
@@ -325,7 +311,7 @@
                     ? (-Math.PI / 2) + (Math.random() - 0.5) * 0.6 // вверх, но с разбросом
                     : angle;
                 const spawnSpeed = spawnFromCenter
-                    ? (0.9 + Math.random() * 0.8) // усиленный стартовый напор вверх, чтобы не копиться у спавна
+                    ? (0.55 + Math.random() * 0.55) // рандомный напор вверх
                     : speed;
 
                 const spawnVx = Math.cos(spawnAngle) * spawnSpeed;
@@ -400,34 +386,10 @@
                 cappedGB = desiredSizes.reduce((acc, s) => acc + s, 0);
             }
 
-            function enqueueSpawn(size) {
-                pendingSpawns.push(size);
-            }
-
-            function spawnQueued(now) {
-                spawnCooldown -= now - (spawnQueued.last || now);
-                spawnQueued.last = now;
-                if (spawnCooldown > 0 || pendingSpawns.length === 0) return;
-
-                let spawned = 0;
-                while (pendingSpawns.length && spawned < SPAWN_BATCH && spawnCooldown <= 0) {
-                    const size = pendingSpawns.shift();
-                    const b = makeBubble(false, true, size);
-                    b.sprite = tintSprite(b.color, b.sprite);
-                    bubbles.push(b);
-                    spawned++;
-                    spawnCooldown += SPAWN_INTERVAL_MS;
-                }
-            }
-
             function reconcileBubbles() {
                 const desired = [...desiredSizes];
                 const existing = [...bubbles].sort((a, b) => b.targetSizeGB - a.targetSizeGB);
                 const keep = Math.min(desired.length, existing.length);
-
-                pendingSpawns.length = 0;
-                spawnCooldown = 0;
-                spawnQueued.last = performance.now();
 
                 for (let i = 0; i < keep; i++) {
                     const b = existing[i];
@@ -436,7 +398,9 @@
 
                 if (desired.length > existing.length) {
                     for (let i = keep; i < desired.length; i++) {
-                        enqueueSpawn(desired[i]);
+                        const b = makeBubble(false, true, desired[i]);
+                        b.sprite = tintSprite(b.color, b.sprite);
+                        bubbles.push(b);
                     }
                 }
 
@@ -459,7 +423,6 @@
             }
 
             function rebuildGrid() {
-                for (const arr of grid.values()) releaseArray(arr);
                 grid.clear();
                 for (let i = 0; i < bubbles.length; i++) {
                     const b = bubbles[i];
@@ -467,12 +430,8 @@
                     for (let cx = minCx; cx <= maxCx; cx++) {
                         for (let cy = minCy; cy <= maxCy; cy++) {
                             const key = gridKey(cx, cy);
-                            let list = grid.get(key);
-                            if (!list) {
-                                list = acquireArray();
-                                grid.set(key, list);
-                            }
-                            list.push(b);
+                            if (!grid.has(key)) grid.set(key, []);
+                            grid.get(key).push(b);
                         }
                     }
                 }
@@ -515,7 +474,6 @@
                 }
 
                 overlapsCount = 0;
-                ghostsCount = 0;
 
                 const steps = Math.max(1, Math.ceil(dt / 0.4));
                 const subDt = dt / steps;
@@ -561,18 +519,8 @@
                     }
 
                     rebuildGrid();
-
-                    let ghostsPresent = false;
-                    for (let i = 0; i < bubbles.length; i++) {
-                        if (!bubbles[i].solid) {
-                            ghostsCount++;
-                            ghostsPresent = true;
-                        }
-                    }
-                    if (ghostsPresent) {
-                        // Помечаем призраков, которые ещё пересекаются с кем-либо
-                        markGhostOverlaps();
-                    }
+                    // Помечаем призраков, которые ещё пересекаются с кем-либо
+                    markGhostOverlaps();
 
                     for (let iter = 0; iter < COLLISION_ITERS; iter++) {
                         resolveCollisionsSpatial(now);
@@ -580,14 +528,11 @@
                     }
                 }
 
-                spawnQueued(now);
-
                 // Переводим "призраков" в твёрдое состояние, когда они не пересекаются ни с кем
                 for (let i = 0; i < bubbles.length; i++) {
                     const b = bubbles[i];
                     if (!b.solid && now > b.ghostUntil && !b.overlapping) {
                         b.solid = true;
-                        ghostsCount = Math.max(0, ghostsCount - 1);
                     }
                 }
 
@@ -604,13 +549,13 @@
                     drawBubble(bubbles[i]);
                 }
 
-                updateLog(now);
+                updateLog();
 
                 requestAnimationFrame(handleFrame);
             }
 
             function resolveCollisionsSpatial(now) {
-                checkedPairs.clear();
+                const checked = new Set();
                 for (const [key, list] of grid.entries()) {
                     const [cx, cy] = key.split('|').map(Number);
                     for (const [dx, dy] of neighborOffsets) {
@@ -625,7 +570,7 @@
                                 if (a === b) continue;
                                 if (!a.solid || !b.solid) continue; // призрачные не участвуют
                                 const pairId = a.id < b.id ? `${a.id}|${b.id}` : `${b.id}|${a.id}`;
-                                if (checkedPairs.has(pairId)) continue;
+                                if (checked.has(pairId)) continue;
 
                                 const dx2 = b.x - a.x;
                                 const dy2 = b.y - a.y;
@@ -666,7 +611,7 @@
                                 b.overlapping = true;
                                 overlapsCount++;
 
-                                checkedPairs.add(pairId);
+                                checked.add(pairId);
                             }
                         }
                     }
@@ -738,11 +683,8 @@
                 }
             }
 
-            function updateLog(now) {
-                if (now - lastLogUpdate < 300) return;
-                lastLogUpdate = now;
-
-                const ghosts = ghostsCount;
+            function updateLog() {
+                const ghosts = bubbles.filter(b => !b.solid).length;
                 const sizes = {};
                 for (let i = 0; i < bubbles.length; i++) {
                     const s = Math.round(bubbles[i].sizeGB * 1000) / 1000;
@@ -752,6 +694,7 @@
                 logEl.textContent = `curGB:${state.currentGB.toFixed(2)} tgtGB:${state.targetGB.toFixed(2)} cappedGB:${cappedGB.toFixed(2)} | desired:${desiredSizes.length} | bubbles:${bubbles.length} | ghosts:${ghosts} | overlaps:${overlapsCount} | sizes[${sizeEntries}]`;
 
                 // консольное логирование раз в 1.5 сек для отладки зависаний
+                const now = performance.now();
                 if (now - lastConsoleLog > 1500) {
                     lastConsoleLog = now;
                     console.log('[bubbles]', {
