@@ -116,6 +116,16 @@
           "name": "Транспортные средства",
           "color": "#7FBFFF",
           "zone": "Зона B"
+        },
+        "cat22": {
+          "name": "Строительная техника (на открытой площадке)",
+          "color": "#77764A",
+          "zone": "Зона B"
+        },
+        "cat23": {
+          "name": "Сельскохозяйственная техника (на открытой площадке)",
+          "color": "#24973A",
+          "zone": "Зона B"
         }
       },
       "buildings": [
@@ -223,7 +233,7 @@
               "y": 58,
               "width": 35,
               "height": 25,
-              "category": "cat5"
+              "category": "cat22"
             }
           ]
         },
@@ -781,14 +791,14 @@
               "y": 58,
               "width": 15,
               "height": 25,
-              "category": "cat6"
+              "category": "cat23"
             },
             {
               "x": 670,
               "y": 58,
               "width": 20,
               "height": 25,
-              "category": "cat5"
+              "category": "cat22"
             }
           ]
         },
@@ -843,7 +853,7 @@
               "y": 106,
               "width": 35,
               "height": 20,
-              "category": "cat9"
+              "category": "cat22"
             },
             {
               "x": 506,
@@ -1961,6 +1971,11 @@
           "name": "Еда",
           "color": "#F7D97F",
           "zone": "Зона B"
+        },
+        "cat24": {
+          "name": "Международный павильон",
+          "color": "#E833B9",
+          "zone": "Зона B"
         }
       },
       "buildings": [
@@ -2058,7 +2073,7 @@
               "y": 262,
               "width": 35,
               "height": 45,
-              "category": "cat16"
+              "category": "cat24"
             },
             {
               "x": 739,
